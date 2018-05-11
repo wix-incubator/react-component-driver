@@ -1,5 +1,5 @@
 {
-  "name": "rtru",
+  "name": "react-test-renderer-utils",
   "version": "0.0.0",
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
