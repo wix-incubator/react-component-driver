@@ -1,5 +1,4 @@
 import React, {PureComponent} from 'react';
-import {View, Text} from 'react-native';
 import {Item} from './item';
 
 export class List extends PureComponent {
@@ -17,21 +16,32 @@ export class List extends PureComponent {
     this.props.testID + '.' + suffix;
 
   renderItem = (item, i) => (
-    <View key={i}>
+    <li key={i}>
       <Item testID={this.getTestID('item-' + i)} index={i + 1} text={item}/>
-    </View>
+    </li>
   );
+
+  renderContent = (items) => {
+    if (items.length > 0) {
+      return (
+        <ul data-test-id={this.getTestID(List.TEST_ID.ITEMS)}>
+          {items.map(this.renderItem)}
+        </ul>
+      );
+    }
+    return (
+      <div data-test-id={this.getTestID(List.TEST_ID.EMPTY)}>
+        No items yet.
+      </div>
+    );
+  }
 
   render () {
     const {items, testID} = this.props;
     return (
-      <View testID={testID}>
-        {
-          items.length ?
-          <View testID={this.getTestID(List.TEST_ID.ITEMS)}>{items.map(this.renderItem)}</View> :
-          <View testID={this.getTestID(List.TEST_ID.EMPTY)}><Text>No items yet.</Text></View>
-        }
-      </View>
+      <div data-test-id={testID}>
+        {this.renderContent(items)}
+      </div>
     );
   }
 }

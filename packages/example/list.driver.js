@@ -1,15 +1,15 @@
-import {componentDriver, getTextNodes, filterBy} from '../../lib/redux-full-render';
+import {componentDriver, getTextNodes, filterBy} from 'reteru/full-render';
 import {List} from './list';
-import {itemDriver} from './item-driver';
+import {itemDriver} from './item.driver';
 
 const itemTestID = (node) => {
-  const testID = node && node.props && node.props.testID;
+  const testID = node && node.props && node.props['data-test-id'];
   return /\.item-\d+$/.test(testID);
 };
 
 export const listDriver = componentDriver(List, {
   getNestedID(id) {
-    return this.props.testID + '.' + id;
+    return this.props['data-test-id'] + '.' + id;
   },
   getItemsContainer() {
     return this.getByID(this.getNestedID(List.TEST_ID.ITEMS));

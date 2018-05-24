@@ -1,9 +1,9 @@
 import {Item} from './item';
-import {componentDriver, getTextNodes} from '../../lib/redux-full-render';
+import {componentDriver, getTextNodes} from 'reteru/full-render';
 
 export const itemDriver = componentDriver(Item, {
   getNestedID(id) {
-    return this.props.testID + '.' + id;
+    return this.props['data-test-id'] + '.' + id;
   },
   getTexts() {
     return [this.getIndex(), this.getText()];
