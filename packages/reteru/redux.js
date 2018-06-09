@@ -1,1 +1,1 @@
-module.exports = require('./build/redux-shallow');
+module.exports = require('./dist/redux-shallow');

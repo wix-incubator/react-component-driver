@@ -1,6 +1,11 @@
 export default backend => {
   const { toJSON } = backend;
 
+  function getTestID(node) {
+    const props = node && node.props || {};
+    return props.testID || props['data-test-id'];
+  }
+
   function getTextNodes(tree) {
     return filterBy(node => typeof node === 'string' || typeof node === 'number', tree);
   }
@@ -8,8 +13,8 @@ export default backend => {
   function filterByTestID(id, tree) {
     const predicate =
       id.constructor === RegExp ?
-      (node) => node && node.props && id.test(node.props.testID) :
-      (node) => node && node.props && node.props.testID === id;
+      (node) => id.test(getTestID(node)) :
+      (node) => getTestID(node) === id;
     return filterBy(predicate, tree);
   }
 

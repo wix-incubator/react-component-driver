@@ -1,20 +1,3 @@
-import {navigatorMock} from './utils/navigator';
-
-const timeMethods = {
-  wait(ms) {
-    if (ms !== undefined) {
-      jest.runTimersToTime(ms);
-    } else {
-      jest.runAllTimers();
-    }
-    return this;
-  },
-  tick() {
-    jest.runAllTicks();
-    return this;
-  }
-};
-
 function guard(arg, name) {
   if (!arg) {
     throw new Error(`Expecting ${name}, got ${arg} of type ${typeof arg}`);
@@ -67,7 +50,7 @@ export function componentDriver(renderComponent, backend) {
           if (!component) {
             throw new Error(
               'Expected to attach to something, got "' +
-                component + '" of type' + typeof component
+                component + '" of type ' + typeof component
             );
           }
           _component = component;
@@ -85,7 +68,6 @@ export function componentDriver(renderComponent, backend) {
           render();
           return this;
         },
-        ...timeMethods,
         ...queryMethods(backend),
         ...methods
       };
@@ -101,12 +83,10 @@ export function containerDriver(renderContainer, backend) {
       let _props = {};
       let _state = {};
       let _createNodeMock = () => null; // works only for react-test-renderer backend.
-      const navigator = navigatorMock();
 
       function getStore() {
         if (!_store) {
           _store = storeWithState(_state);
-          _store.dispatch = jest.fn(_store.dispatch.bind(_store));
         }
         return _store;
       }
@@ -116,7 +96,7 @@ export function containerDriver(renderContainer, backend) {
           _component = renderContainer(
             component,
             getStore(),
-            {..._props, navigator},
+            _props,
             {createNodeMock: _createNodeMock}
           );
         }
@@ -128,10 +108,11 @@ export function containerDriver(renderContainer, backend) {
           if (!component) {
             throw new Error(
               'Expected to attach to something, got "' +
-              component + '" of type' + typeof component
+              component + '" of type ' + typeof component
             );
           }
           _component = component;
+          // this.props = component.props; // TODO: add test for this!
           return this;
         },
         withProps(props) {
@@ -146,9 +127,6 @@ export function containerDriver(renderContainer, backend) {
           _createNodeMock = createNodeMock;
           return this;
         },
-        getNavigator() {
-          return navigator;
-        },
         getStore() {
           return getStore();
         },
@@ -162,25 +140,6 @@ export function containerDriver(renderContainer, backend) {
           this.getComponent();
           return this;
         },
-        emit(id, type = 'NavBarButtonPress') {
-          this.render();
-          const nav = this.getNavigator();
-          nav.emitEvent(nav.createEvent(id, type));
-          return this;
-        },
-        emitWillAppear() {
-          return this.emit('willAppear', 'ScreenChangedEvent');
-        },
-        emitDidDisappear() {
-          return this.emit('didDisappear', 'ScreenChangedEvent');
-        },
-        emitDidAppear() {
-          return this.emit('didAppear', 'ScreenChangedEvent');
-        },
-        emitWillDisappear() {
-          return this.emit('willDisappear', 'ScreenChangedEvent');
-        },
-        ...timeMethods,
         ...queryMethods(backend),
         ...methods
       };
