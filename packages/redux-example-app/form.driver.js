@@ -1,4 +1,5 @@
 import {componentDriver} from 'reteru';
+
 import {Form} from './form';
 
 const {INPUT, BUTTON} = Form.TEST_ID;
@@ -14,11 +15,11 @@ export const formDriver = componentDriver(Form, {
   getInputValue() {
     return this.getInput().props.value;
   },
-  setInputValue(value) {
+  invokeOnInputChange(value) {
     this.getInput().props.onChange(value);
     return this;
   },
-  tapAdd() {
+  clickAdd() {
     this.getByID(this.getNestedID(BUTTON)).props.onClick();
     return this;
   }
