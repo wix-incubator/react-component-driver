@@ -1,4 +1,4 @@
-import {componentDriver} from 'reteru';
+import {componentDriver} from 'reut';
 
 import {Form} from './form';
 

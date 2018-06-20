@@ -1,4 +1,4 @@
-import {componentDriver, getTextNodes, filterBy} from 'reteru';
+import {componentDriver, getTextNodes, filterBy} from 'reut';
 
 import {List} from './list';
 import {itemDriver} from './item.driver';

@@ -24,7 +24,7 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
-    "reteru": "^1.0.0",
+    "reut": "^1.0.0",
     "sinon": "^5.0.9",
     "sinon-chai": "^3.1.0"
   }

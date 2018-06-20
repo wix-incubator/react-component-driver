@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {containerDriver} from 'reteru';
+import {containerDriver} from 'reut';
 
 import {formDriver} from './form.driver';
 import {listDriver} from './list.driver';

@@ -1,5 +1,5 @@
 import {Item} from './item';
-import {componentDriver, getTextNodes} from 'reteru';
+import {componentDriver, getTextNodes} from 'reut';
 
 export const itemDriver = componentDriver(Item, {
   getNestedID(id) {
