@@ -4,3 +4,4 @@ target/
 dist/
 *.log
 package-lock.json
+coverage/
