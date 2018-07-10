@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 
-import {Form} from './form';
-import {List} from './list';
+import {Form} from './components/form';
+import {List} from './components/list';
 
 export class App extends PureComponent {
   static TEST_ID = {

@@ -1,8 +1,8 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 
-import {Form} from './form';
-import {List} from './list';
+import {Form} from './components/form';
+import {List} from './components/list';
 import {stateReader} from './store/reader';
 
 class _App extends PureComponent {

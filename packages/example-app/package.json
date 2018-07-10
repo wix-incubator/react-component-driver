@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -r ./mocha-setup.js -r babel-register '*.{spec,it}.js'",
+    "test": "mocha -r ./mocha-setup.js -r babel-register --recursive src/",
     "tdd": "npm run test -- -w"
   },
   "author": "",
