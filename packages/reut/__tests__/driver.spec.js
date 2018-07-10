@@ -2,7 +2,6 @@ jest.useFakeTimers();
 
 import Example from '../components/example';
 import ReduxExample from '../components/redux-example';
-import NavExample from '../components/nav-example';
 import {ImperativeContainer} from '../components/imperative';
 import * as ez from '../lib/shallow';
 import * as ezr from '../lib/redux-shallow';
@@ -34,24 +33,6 @@ describe('Driver', function () {
         it('should allow to set props', function () {
           expect(example().withProps({welcomeText: 'Hello'}).getText())
             .toEqual(['Hello']);
-        });
-
-        it('should allow to wait', function () {
-          const f = jest.fn();
-          setTimeout(f, 100);
-          const drv = example();
-          expect(f).not.toBeCalled();
-          drv.wait();
-          expect(f).toBeCalled();
-        });
-
-        it('should allow to wait for particular period of time', function () {
-          const f = jest.fn();
-          setTimeout(f, 100);
-          const drv = example().wait(99);
-          expect(f).not.toBeCalled();
-          drv.wait(1);
-          expect(f).toBeCalled();
         });
 
         it('should allow to quickly fetch by id', () => {
@@ -95,18 +76,11 @@ describe('Driver', function () {
     describe('containerDriver from ' + name, () => {
       const {filterByType, containerDriver, getStore} = toolkit;
       const makeStore = state => getStore(state => state, state);
-      const eventLog = [];
 
       const example = containerDriver(ReduxExample, makeStore, {
         getText() {
           return this.getByType('Text').children;
         }
-      });
-
-      const navExample = containerDriver(NavExample(eventLog), makeStore);
-
-      beforeEach(() => {
-        eventLog.splice(0);
       });
 
       it('should allow to set state', function () {
@@ -118,44 +92,6 @@ describe('Driver', function () {
         const store = example().getStore();
         store.dispatch({type: 'A'});
         expect(store.dispatch).toBeCalledWith({type: 'A'});
-      });
-
-      it('should supply shorthand method for emitting navigator events', function () {
-        navExample().render().emit('hello').emit('world', 'CustomType');
-        expect(eventLog).toEqual([
-          {id: 'hello', type: 'NavBarButtonPress'},
-          {id: 'world', type: 'CustomType'},
-        ]);
-      });
-
-      describe('Navigation Shorthands', () => {
-        it('should emit "willAppear"', () => {
-          navExample().render().emitWillAppear();
-          expect(eventLog).toEqual([
-            {id: 'willAppear', type: 'ScreenChangedEvent'},
-          ]);
-        });
-
-        it('should emit "didDisappear"', () => {
-          navExample().render().emitDidDisappear();
-          expect(eventLog).toEqual([
-            {id: 'didDisappear', type: 'ScreenChangedEvent'},
-          ]);
-        });
-
-        it('should emit "didAppear"', () => {
-          navExample().render().emitDidAppear();
-          expect(eventLog).toEqual([
-            {id: 'didAppear', type: 'ScreenChangedEvent'},
-          ]);
-        });
-
-        it('should emit "willDisappear"', () => {
-          navExample().render().emitWillDisappear();
-          expect(eventLog).toEqual([
-            {id: 'willDisappear', type: 'ScreenChangedEvent'},
-          ]);
-        });
       });
     });
   });
