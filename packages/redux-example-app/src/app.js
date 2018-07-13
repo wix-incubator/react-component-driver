@@ -12,8 +12,6 @@ class _App extends PureComponent {
     LIST: 'app.list',
   };
 
-  onAdd = (item) => {};
-
   render() {
     const {listItems, formInput, onAddItem, onInputChange} = this.props;
     return (
