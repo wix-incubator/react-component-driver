@@ -1,4 +1,6 @@
-import ReduxExample from '../components/redux-example';
+jest.mock('Text', () => 'Text');
+jest.mock('View', () => 'View');
+
 import Example from '../components/example';
 import ExampleWithEmptyElements from '../components/example-with-empty-elements';
 import NumberNodeExample from '../components/number-node-example';
@@ -11,8 +13,7 @@ import * as reactTestRenderer from '../lib/redux-full-render';
 function test(suiteName, {
   renderComponent,
   getTextNodes,
-  getStore,
-  renderContainer,
+  filterBy,
   filterByType,
   filterByTestID
 }) {
@@ -20,19 +21,28 @@ function test(suiteName, {
     it('should render component', function () {
       const welcomeText = 'Hello, World!';
       const example = renderComponent(Example, {welcomeText});
-      expect(getTextNodes(example)).toEqual([welcomeText]);
-    });
-
-    it('should render container connected to redux store', function () {
-      const welcomeText = 'Hello, World!';
-      const example = renderContainer(ReduxExample, getStore(state => state, {welcomeText}));
-      expect(getTextNodes(example)).toEqual([welcomeText]);
+      expect(filterBy(() => true, example)[0]).toEqual({
+        type: 'View',
+        props: {},
+        children: [
+          {
+            type: 'View',
+            props: {testID: 'button', onPress: expect.any(Function)},
+            children: []
+          },
+          {
+            type: 'Text',
+            props: {testID: 'welcome_text'},
+            children: [welcomeText]
+          },
+        ]
+      });
     });
 
     it('should re-render when state changes', function () {
       const welcomeText = 'Hello, World!';
       const example = renderComponent(Example, {welcomeText});
-      filterByTestID('Button', example)[0].props.onPress();
+      filterByTestID('button', example)[0].props.onPress();
       expect(getTextNodes(example)).toEqual([]);
     });
 

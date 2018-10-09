@@ -14,7 +14,7 @@ export default class Example extends Component {
   render() {
     return (
       <View>
-        <View testID="Button" onPress={this.hide.bind(this)}></View>
+        <View testID="button" onPress={this.hide.bind(this)}></View>
         {this.state.hide ? <Text/> : <Text testID="welcome_text">{this.props.welcomeText}</Text>}
       </View>
     );
