@@ -1,1 +1,1 @@
-module.exports = require('./dist/redux-shallow');
+module.exports = require('./dist/redux-full-render');
