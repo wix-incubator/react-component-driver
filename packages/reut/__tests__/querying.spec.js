@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import * as enzyme from '../lib/shallow';
-import * as rtr from '../lib/full-render';
+import * as shallow from '../lib/shallow';
+import * as full from '../lib/full-render';
 
 [
-  ['shallow', enzyme],
-  ['full renderer', rtr]
+  ['Shallow renderer', shallow],
+  ['Full renderer', full]
 ].forEach(([name, backend]) => {
   describe(name + ' queries', function () {
     const {
