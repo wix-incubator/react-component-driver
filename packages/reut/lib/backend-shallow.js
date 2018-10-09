@@ -37,13 +37,13 @@ function _toJSON(node) {
       type,
       props,
       children: Array.isArray(children) ?
-        flatten(children.map(_toJSON)).filter(identity) :
-        (children != null && [_toJSON(maybeToString(children))].filter(identity) || [])
+        flatten(children.map(_toJSON)).filter(notNull) :
+        (children != null && [_toJSON(maybeToString(children))].filter(notNull) || [])
     };
   }
 }
 
-function identity(x) {
+function notNull(x) {
   return x !== null;
 }
 
