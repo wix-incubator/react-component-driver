@@ -36,10 +36,15 @@ export function componentDriver(renderComponent, backend) {
     return function driver() {
       let _component;
       let _props = {};
+      let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
       function render() {
         if (!_component) {
-          _component = renderComponent(component, _props);
+          _component = renderComponent(
+            component,
+            _props,
+            {createNodeMock: _createNodeMock}
+          );
         }
         return _component;
       }
@@ -68,6 +73,10 @@ export function componentDriver(renderComponent, backend) {
           render();
           return this;
         },
+        withNodeMocker(createNodeMock) {
+          _createNodeMock = createNodeMock;
+          return this;
+        },
         ...queryMethods(backend),
         ...methods
       };
@@ -76,26 +85,18 @@ export function componentDriver(renderComponent, backend) {
 }
 
 export function containerDriver(renderContainer, backend) {
-  return function factory(component, storeWithState, methods = {}) {
+  return function factory(component, store, methods = {}) {
     return function driver() {
       let _component;
-      let _store;
       let _props = {};
       let _state = {};
       let _createNodeMock = () => null; // works only for react-test-renderer backend.
-
-      function getStore() {
-        if (!_store) {
-          _store = storeWithState(_state);
-        }
-        return _store;
-      }
 
       function render() {
         if (!_component) {
           _component = renderContainer(
             component,
-            getStore(),
+            store,
             _props,
             {createNodeMock: _createNodeMock}
           );
@@ -128,7 +129,7 @@ export function containerDriver(renderContainer, backend) {
           return this;
         },
         getStore() {
-          return getStore();
+          return store;
         },
         getState() {
           return this.getStore().getState();

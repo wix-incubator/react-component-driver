@@ -22,13 +22,11 @@
     "jest": "^22.0.0",
     "lerna": "^2.11.0",
     "react": "~16.0.0",
-    "react-native": "0.51.0",
-    "react-redux": "~4.4.6",
-    "redux": "~3.6.0",
-    "redux-thunk": "~2.1.0"
+    "react-native": "0.51.0"
   },
   "jest": {
     "preset": "react-native",
-    "clearMocks": true
+    "clearMocks": true,
+    "testMatch": ["**/__tests__/**/*.spec.js"]
   }
 }

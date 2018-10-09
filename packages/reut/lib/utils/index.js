@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-export * from './store';
-
 export function component(comp, props = {}) {
   return React.createElement(comp, props);
 }

@@ -1,5 +1,6 @@
 import {ImperativeComponent, ImperativeContainer} from '../components/imperative';
 import {renderComponent, renderContainer, filterByTestID, getStore} from '../lib/redux-full-render';
+import DUMMY_STORE from './dummy-store';
 
 jest.mock('TouchableOpacity', () => 'TouchableOpacity');
 jest.mock('TextInput', () => 'TextInput');
@@ -7,7 +8,11 @@ jest.mock('TextInput', () => 'TextInput');
 describe('Ref Mock', function () {
   it('should mock node focus() method in for dumb component', function () {
     const focus = jest.fn();
-    const component = renderComponent(ImperativeComponent, {}, {createNodeMock: () => ({focus})});
+    const component = renderComponent(
+      ImperativeComponent,
+      {},
+      {createNodeMock: () => ({focus})}
+    );
     filterByTestID('Button', component)[0].props.onPress();
     expect(focus).toBeCalled();
   });
@@ -16,7 +21,7 @@ describe('Ref Mock', function () {
     const focus = jest.fn();
     const component = renderContainer(
       ImperativeContainer,
-      getStore(state => state, {}),
+      DUMMY_STORE,
       {},
       {createNodeMock: () => ({focus})}
     );

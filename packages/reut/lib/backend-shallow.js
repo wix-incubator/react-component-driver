@@ -6,7 +6,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 export function render(element, twice) {
   const renderer = new ShallowRenderer();
   renderer.render(element);
-  if (twice) {
+  if (twice === true) {
     return render(renderer.getRenderOutput());
   }
   return renderer;
@@ -29,21 +29,22 @@ function _toJSON(node) {
   } else if (node == null || node === false) {
     return null;
   } else {
-    const type = node.type.displayName || node.type.name;
+    const type = node.type;
+    const typeName = typeof type === 'string' ? type : (type.displayName || type.name);
     const props = Object.assign({}, node.props);
     delete props.children;
     const children = node.props.children;
     return {
-      type,
+      type: typeName,
       props,
       children: Array.isArray(children) ?
-        flatten(children.map(_toJSON)).filter(identity) :
-        (children != null && [_toJSON(maybeToString(children))].filter(identity) || [])
+        flatten(children.map(_toJSON)).filter(notNull) :
+        (children != null && [_toJSON(maybeToString(children))].filter(notNull) || [])
     };
   }
 }
 
-function identity(x) {
+function notNull(x) {
   return x !== null;
 }
 
