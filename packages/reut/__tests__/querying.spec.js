@@ -43,10 +43,16 @@ import * as rtr from '../lib/full-render';
       expect(getTextNodes(comp)).toEqual(['Hello', 'World', '!']);
     });
 
-    it('should extract node by test ID', function () {
+    it('should extract node by `testID` prop', function () {
       const node = <View testID='a'></View>;
       const comp = renderComponent(() => (<View>{node}</View>));
       expect(filterByTestID('a', comp)[0].type).toBe('View');
+    });
+
+    it('should extract node by `data-test-id` prop', function () {
+      const node = <div data-test-id='a'></div>;
+      const comp = renderComponent(() => (<div>{node}</div>));
+      expect(filterByTestID('a', comp)[0].type).toBe('div');
     });
 
     it('should extract nodes by type', function () {
