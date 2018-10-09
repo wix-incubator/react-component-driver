@@ -6,9 +6,9 @@ export default class Example extends Component {
     return (
       <View>
         {'Hello'}
-        {false && 'World'}
-        {null && '!'}
-        {undefined && '.'}
+        {false}
+        {null}
+        {undefined}
       </View>
     );
   }
