@@ -10,7 +10,7 @@ function getTestID(prefix, suffix) {
   return prefix + '.' + suffix;
 }
 
-const appDriver = containerDriver(App, createAppStore, {
+const appDriver = containerDriver(App, createAppStore(), {
   getList() {
     return listDriver()
       .attachTo(this.getByID(App.TEST_ID.LIST))
