@@ -1,0 +1,6 @@
+* Next
+** Driver
+*** TODO Drop containerDriver
+- [ ] componentDriver -> driver?
+- [ ] Expose redux helper to wrap component in Provider.
+*** TODO .getComponent() should always render to JSON
