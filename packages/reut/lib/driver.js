@@ -36,10 +36,15 @@ export function componentDriver(renderComponent, backend) {
     return function driver() {
       let _component;
       let _props = {};
+      let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
       function render() {
         if (!_component) {
-          _component = renderComponent(component, _props);
+          _component = renderComponent(
+            component,
+            _props,
+            {createNodeMock: _createNodeMock}
+          );
         }
         return _component;
       }
@@ -66,6 +71,10 @@ export function componentDriver(renderComponent, backend) {
         },
         render() {
           render();
+          return this;
+        },
+        withNodeMocker(createNodeMock) {
+          _createNodeMock = createNodeMock;
           return this;
         },
         ...queryMethods(backend),
