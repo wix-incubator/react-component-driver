@@ -14,7 +14,7 @@ export const containerDriver = containerDriverFactory(renderContainer, backend);
 export const componentDriver = componentDriverFactory(renderComponent, backend);
 
 export function renderContainer() {
-  return render(container(...arguments), true);
+  return render(container(...arguments), /* twice */ true);
 }
 
 function container(comp, store, props = {}) {
