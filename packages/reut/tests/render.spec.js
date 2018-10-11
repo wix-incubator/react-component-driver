@@ -1,14 +1,14 @@
 jest.mock('Text', () => 'Text');
 jest.mock('View', () => 'View');
 
-import Example from '../components/example';
-import ExampleWithEmptyElements from '../components/example-with-empty-elements';
-import NumberNodeExample from '../components/number-node-example';
-import Null from '../components/null';
-import Undefined from '../components/undefined';
+import Example from './components/example';
+import ExampleWithEmptyElements from './components/example-with-empty-elements';
+import NumberNodeExample from './components/number-node-example';
+import Null from './components/null';
+import Undefined from './components/undefined';
 
-import * as enzyme from '../lib/redux-shallow';
-import * as reactTestRenderer from '../lib/redux-full-render';
+import * as shalldow from '../shallow';
+import * as full from '../index';
 
 function test(suiteName, {
   renderComponent,
@@ -73,5 +73,5 @@ function test(suiteName, {
   });
 }
 
-test('Enzyme Rendering', enzyme);
-test('ReactTestRenderer Rendering', reactTestRenderer);
+test('Enzyme Rendering', shalldow);
+test('ReactTestRenderer Rendering', full);

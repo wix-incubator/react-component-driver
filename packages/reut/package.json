@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i 2>&1",
-    "build": "babel lib --out-dir dist",
+    "build": "babel src --out-dir dist",
     "watch": "chokidar lib -c 'npm run build'",
     "postinstall": "npm run build"
   },
@@ -27,6 +27,6 @@
   "jest": {
     "preset": "react-native",
     "clearMocks": true,
-    "testMatch": ["**/__tests__/**/*.spec.js"]
+    "testRegex": "tests/.*\\.spec\\.js"
   }
 }

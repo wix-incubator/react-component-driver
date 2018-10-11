@@ -1,5 +1,5 @@
-import ContextExample from '../components/context-example';
-import {renderComponent, withContext, filterByType} from '../lib/redux-full-render';
+import ContextExample from './components/context-example';
+import {renderComponent, withContext, filterByType} from '../index';
 
 describe('Context', function () {
   it('should allow to set context when rendering', function () {

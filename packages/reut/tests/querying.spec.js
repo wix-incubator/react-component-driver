@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import * as shallow from '../lib/shallow';
-import * as full from '../lib/full-render';
+import * as shallow from '../shallow';
+import * as full from '../index';
 
 [
   ['Shallow renderer', shallow],

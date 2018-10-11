@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-export function component(comp, props = {}) {
-  return React.createElement(comp, props);
-}
+// export function component(comp, props = {}) {
+//   return React.createElement(comp, props);
+// }
 
-export function withContext(Wrapped, context) {
+export default function withContext(Wrapped, context) {
   return class extends Component {
     static childContextTypes = Wrapped.contextTypes;
 

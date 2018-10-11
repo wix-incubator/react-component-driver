@@ -2,9 +2,9 @@ jest.useFakeTimers();
 jest.mock('Text', () => 'Text');
 jest.mock('View', () => 'View');
 
-import Example from '../components/example';
-import * as shallow from '../lib/shallow';
-import * as full from '../lib/redux-full-render';
+import Example from './components/example';
+import * as shallow from '../shallow';
+import * as full from '../index';
 
 describe('Driver', function () {
   [
