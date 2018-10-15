@@ -4,14 +4,15 @@
   "description": "React Component Driver adapted to work with Redux enhanced component.",
   "main": "index.js",
   "scripts": {
-    "prepare": "babel src --out-dir dist",
+    "prepare": "rimraf dist && babel src --out-dir dist",
     "watch": "chokidar lib -c 'npm run prepare'"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "repository": "github:donataswix/react-component-driver",
   "license": "MIT",
   "dependencies": {
-    "react-component-driver": "^0.2.0"
+    "react-component-driver": "^0.2.0",
+    "@babel/runtime": "^7.1.2"
   },
   "peerDependencies": {
     "react-redux": "*",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^22.0.0",
@@ -27,7 +29,8 @@
     "jest": "^22.0.0",
     "react": "~16.0.0",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "rimraf": "^2.6.2"
   },
   "jest": {
     "clearMocks": true,
