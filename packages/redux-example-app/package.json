@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "redux-example-app",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "mocha": "^5.2.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.1",
-    "redux-component-driver": "0.1.0",
+    "redux-component-driver": "^0.2.0",
     "sinon": "^5.0.9",
     "sinon-chai": "^3.1.0"
   }
