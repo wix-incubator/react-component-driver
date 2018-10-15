@@ -1,6 +1,14 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 
-export function withStore(comp, store, props = {}) {
-  return <Provider store={store}>{React.createElement(comp, props)}</Provider>;
+export function withStore(WrappedComponent, store) {
+  return class WithStore extends React.Component {
+    render() {
+      return (
+        <Provider store={store}>
+          <WrappedComponent {...this.props} />
+        </Provider>
+      );
+    }
+  };
 }
