@@ -1,6 +1,6 @@
 {
   "name": "reut",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
   "scripts": {
