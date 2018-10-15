@@ -8,7 +8,7 @@
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^2.11.0"
+    "lerna": "^3.0.0"
   },
   "dependencies": {}
 }

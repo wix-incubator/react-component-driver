@@ -4,15 +4,14 @@
   "description": "React Component Driver adapted to work with Redux enhanced component.",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir dist",
-    "watch": "chokidar lib -c 'npm run build'",
-    "postinstall": "npm run build"
+    "prepare": "babel src --out-dir dist",
+    "watch": "chokidar lib -c 'npm run prepare'"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "repository": "github:donataswix/react-component-driver",
   "license": "MIT",
   "dependencies": {
-    "react-component-driver": "^0.1.0"
+    "react-component-driver": "^0.2.0"
   },
   "peerDependencies": {
     "react-redux": "*",

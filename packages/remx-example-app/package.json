@@ -5,7 +5,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -r ./mocha-setup.js -r babel-register --recursive src/",
+    "test": "mocha -r ./mocha-setup.js -r @babel/register --recursive src/",
     "tdd": "npm run test -- -w"
   },
   "author": "",
@@ -14,16 +14,17 @@
     "react": "^16.3.2"
   },
   "devDependencies": {
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.26.0",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "chai": "^4.1.2",
     "chai-truthy": "^1.0.0",
     "dirty-chai": "^2.0.1",
     "mocha": "^5.2.0",
     "remx": "^2.0.50",
-    "react-component-driver": "^0.1.0",
+    "react-component-driver": "0.2.0",
     "sinon": "^5.0.9",
     "sinon-chai": "^3.1.0"
   }

@@ -1,32 +1,35 @@
 {
   "name": "react-component-driver",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
   "scripts": {
     "test": "jest -i 2>&1",
-    "build": "babel src --out-dir dist",
-    "watch": "chokidar lib -c 'npm run build'",
-    "postinstall": "npm run build"
+    "prepare": "babel src --out-dir dist",
+    "watch": "chokidar lib -c 'npm run prepare'"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "repository": "github:donataswix/react-component-driver",
   "license": "MIT",
-  "dependencies": {
-    "react-test-renderer": "~16.0.0"
+  "peerDependencies": {
+    "react-test-renderer": "*"
   },
   "devDependencies": {
-    "babel-cli": "~6.18.0",
-    "babel-jest": "^22.0.0",
-    "babel-preset-react-native": "^1.9.2",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "babel-jest": "^23.6.0",
     "chokidar-cli": "^1.2.0",
-    "jest": "^22.0.0",
-    "lerna": "^2.11.0",
-    "react": "~16.0.0",
-    "react-native": "0.51.0"
+    "jest": "^23.0.0",
+    "metro-react-native-babel-preset": "^0.48.1",
+    "react": "^16.5.2",
+    "react-native": "^0.57.3",
+    "react-test-renderer": "^16.5.0"
   },
   "jest": {
     "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
     "clearMocks": true,
     "testRegex": "tests/.*\\.spec\\.js"
   }

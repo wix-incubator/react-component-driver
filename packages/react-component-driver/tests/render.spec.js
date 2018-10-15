@@ -7,7 +7,7 @@ import NumberNodeExample from './components/number-node-example';
 import Null from './components/null';
 import Undefined from './components/undefined';
 
-import * as shalldow from '../shallow';
+import * as shallow from '../shallow';
 import * as full from '../index';
 
 function test(suiteName, {
@@ -73,5 +73,5 @@ function test(suiteName, {
   });
 }
 
-test('Enzyme Rendering', shalldow);
-test('ReactTestRenderer Rendering', full);
+test('Shallow rendering', shallow);
+test('Full rendering', full);

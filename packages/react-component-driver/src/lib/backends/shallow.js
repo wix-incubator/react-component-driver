@@ -19,6 +19,16 @@ export function toJSON(component) {
   return _toJSON(component.getRenderOutput()) || '';
 }
 
+function getComponentName(component) {
+  return component.displayName || component.name;
+}
+
+function getTypeName(typeObject) {
+  return typeObject.render ?
+    getComponentName(typeObject.render) :
+    getComponentName(typeObject);
+}
+
 function _toJSON(node) {
   if (Array.isArray(node)) {
     return node.map(_toJSON);
@@ -30,7 +40,7 @@ function _toJSON(node) {
     return null;
   } else {
     const type = node.type;
-    const typeName = typeof type === 'string' ? type : (type.displayName || type.name);
+    const typeName = typeof type === 'string' ? type : getTypeName(type);
     const props = Object.assign({}, node.props);
     delete props.children;
     const children = node.props.children;
