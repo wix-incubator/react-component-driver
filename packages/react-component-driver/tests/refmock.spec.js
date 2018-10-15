@@ -1,4 +1,4 @@
-import {ImperativeComponent, ImperativeContainer} from './components/imperative';
+import {ImperativeComponent} from './components/imperative';
 import {renderComponent, filterByTestID, getStore} from '../index';
 
 jest.mock('TouchableOpacity', () => 'TouchableOpacity');
