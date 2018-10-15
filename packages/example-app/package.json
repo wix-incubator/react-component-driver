@@ -21,7 +21,7 @@
     "chai-truthy": "^1.0.0",
     "dirty-chai": "^2.0.1",
     "mocha": "^5.2.0",
-    "reut": "^1.0.0",
+    "react-component-driver": "^0.1.0",
     "sinon": "^5.0.9",
     "sinon-chai": "^3.1.0"
   }

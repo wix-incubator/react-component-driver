@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
-import {componentDriver} from 'reut';
-import {withStore} from 'reut/redux';
+import {componentDriver} from 'react-component-driver';
+import {withStore} from 'react-component-driver/redux';
 
 import {formDriver} from './components/form.driver';
 import {listDriver} from './components/list.driver';

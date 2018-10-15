@@ -1,5 +1,5 @@
 {
-  "name": "reut",
+  "name": "react-component-driver",
   "private": true,
   "scripts": {
     "test": "lerna run test",

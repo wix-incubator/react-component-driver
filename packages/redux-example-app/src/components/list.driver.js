@@ -1,4 +1,4 @@
-import {componentDriver, getTextNodes, filterBy} from 'reut';
+import {componentDriver, getTextNodes, filterBy} from 'react-component-driver';
 
 import {List} from './list';
 import {itemDriver} from './item.driver';

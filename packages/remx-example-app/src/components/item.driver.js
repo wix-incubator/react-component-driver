@@ -1,4 +1,4 @@
-import {componentDriver, getTextNodes} from 'reut';
+import {componentDriver, getTextNodes} from 'react-component-driver';
 
 import {Item} from './item';
 

@@ -1,4 +1,4 @@
-import {componentDriver} from 'reut';
+import {componentDriver} from 'react-component-driver';
 import {Form} from './form';
 
 const {INPUT, BUTTON} = Form.TEST_ID;

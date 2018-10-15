@@ -1,5 +1,5 @@
 import {Item} from './item';
-import {componentDriver, getTextNodes} from 'reut';
+import {componentDriver, getTextNodes} from 'react-component-driver';
 
 export const itemDriver = componentDriver(Item, {
   getNestedID(id) {

@@ -1,5 +1,5 @@
 {
-  "name": "reut",
+  "name": "react-component-driver",
   "version": "0.1.0",
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "postinstall": "npm run build"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
+  "repository": "github:donataswix/react-component-driver",
   "license": "MIT",
   "dependencies": {
     "react-test-renderer": "~16.0.0"

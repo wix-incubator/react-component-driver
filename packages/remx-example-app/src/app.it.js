@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {componentDriver} from 'reut';
+import {componentDriver} from 'react-component-driver';
 
 import createApp from './app';
 import {createAppState} from './store';
