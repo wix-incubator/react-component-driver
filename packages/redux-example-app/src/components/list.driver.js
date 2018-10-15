@@ -1,4 +1,4 @@
-import {componentDriver, getTextNodes, filterBy} from 'react-component-driver';
+import {componentDriver, getTextNodes, filterBy} from 'redux-component-driver';
 
 import {List} from './list';
 import {itemDriver} from './item.driver';

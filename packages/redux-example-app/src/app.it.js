@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
-import {componentDriver} from 'react-component-driver';
-import {withStore} from 'react-component-driver/redux';
+import {reduxDriver} from 'redux-component-driver';
 
 import {formDriver} from './components/form.driver';
 import {listDriver} from './components/list.driver';
@@ -11,7 +10,7 @@ function getTestID(prefix, suffix) {
   return prefix + '.' + suffix;
 }
 
-const appDriver = componentDriver(withStore(App, createAppStore()), {
+const appDriver = reduxDriver(App, createAppStore(), {
   getList() {
     return listDriver()
       .attachTo(this.getByID(App.TEST_ID.LIST))

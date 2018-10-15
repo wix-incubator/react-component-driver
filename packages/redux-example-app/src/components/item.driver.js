@@ -1,4 +1,4 @@
-import {componentDriver, getTextNodes} from 'react-component-driver';
+import {componentDriver, getTextNodes} from 'redux-component-driver';
 
 import {Item} from './item';
 

@@ -1,4 +1,4 @@
-import {componentDriver} from 'react-component-driver';
+import {componentDriver} from 'redux-component-driver';
 
 import {Form} from './form';
 
