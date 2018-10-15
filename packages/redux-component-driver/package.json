@@ -1,6 +1,6 @@
 {
   "name": "redux-component-driver",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React Component Driver adapted to work with Redux enhanced component.",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,8 @@
   "repository": "github:donataswix/react-component-driver",
   "license": "MIT",
   "dependencies": {
-    "react-component-driver": "^0.2.0",
-    "@babel/runtime": "^7.1.2"
+    "@babel/runtime": "^7.1.2",
+    "react-component-driver": "^0.3.0"
   },
   "peerDependencies": {
     "react-redux": "*",
