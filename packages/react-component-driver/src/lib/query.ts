@@ -1,45 +1,47 @@
 import fullRender = require('./backends/full-render');
-import {InitialRender, Node} from './backends/types';
+import {Backend, Render, Child, render_map} from './backends/types';
+import {flatten} from './utils/flatten';
 
-export default (backend: typeof fullRender) => {
+export interface Queries {
+  getTextNodes(tree: Render): Child[];
+  filterByTestID(id: string | RegExp, tree: Render): Child[];
+  filterByType(type: string, tree: Render): Child[];
+  filterBy(predicate: (node: Child) => boolean, tree: Render): Child[];
+}
+
+export default function queries<R, O>(backend: Backend<R, O>): Queries {
   const { toJSON } = backend;
 
-  function getTestID(node: Node) {
+  function getTestID(node: Child) {
     const props = node && typeof node === 'object' ? node.props : {};
     return props.testID || props['data-test-id'];
   }
 
-  function getTextNodes(tree: Node) {
+  function getTextNodes(tree: Render) {
     return filterBy(node => typeof node === 'string' || typeof node === 'number', tree);
   }
 
-  function filterByTestID(id, tree) {
+  function filterByTestID(id: string | RegExp, tree: Render) {
     const predicate =
       id.constructor === RegExp ?
-      (node) => id.test(getTestID(node)) :
-      (node) => getTestID(node) === id;
+      ((node: Child) => (id as RegExp).test(getTestID(node))) :
+      ((node: Child) => getTestID(node) === id);
     return filterBy(predicate, tree);
   }
 
-  function filterByType(type, tree) {
-    return filterBy(node => node.type === type, tree);
+  function filterByType(type: string, tree: Render) {
+    return filterBy(node => typeof node === 'object' && node.type === type, tree);
   }
 
-  function filterBy(predicate: (node: Node) => boolean, tree: InitialRender) {
+  function filterBy(predicate: (node: Child) => boolean, tree: Render) {
     const json = toJSON(tree);
-    const f = (acc: Node[], node: Node) => predicate(node) ? acc.concat(node) : acc;
+    const f = (acc: Child[], node: Child) => predicate(node) ? acc.concat(node) : acc;
     if (Array.isArray(json)) {
       return flatten(json.map((node) => tree_fold(node, [], f)));
-    } else if (isIterable(json)) {
-      // Some weird full renderer case.
-      return flatten(
-        Object.keys(json)
-          .filter((key) => Number.isInteger(+key))
-          .map((i) => tree_fold(json[i], [], f))
-      );
-    } else {
+    } else if (json) {
       return tree_fold(json, [], f);
     }
+    return [];
   }
 
   return {
@@ -50,24 +52,14 @@ export default (backend: typeof fullRender) => {
   };
 };
 
-function flatten<X>(arrays: X[][]): X[] {
-  return Array.prototype.concat.call([] as X[], ...arrays);
-}
-
-// XXX: full renderer returns array like object if array is used for root
-// element. Children is supposed to always be empty.
-function isIterable(json: any): boolean {
-  return json && json[0] && json.children && json.children.length === 0;
-}
-
-function get_children(node: Node) {
+function get_children(node: Child) {
   if (node && typeof node === 'object') {
     return node.children || [];
   }
   return [];
 }
 
-function tree_fold<R>(node: Node, acc: R, f: (acc: R, node: Node) => R): R {
+function tree_fold<R>(node: Child, acc: R, f: (acc: R, node: Child) => R): R {
   return list_fold(
     get_children(node),
     f(acc, node),

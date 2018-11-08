@@ -54,16 +54,6 @@ describe('Driver', function () {
         expect(example().filterByID(/^welcome.+$/).length).toBe(1);
       });
 
-      it('should throw when trying to get by missing id', () => {
-        expect(() => example().getByID()).toThrow();
-        expect(() => example().filterByID()).toThrow();
-      });
-
-      it('should throw when trying to get by missing type', () => {
-        expect(() => example().getByType()).toThrow();
-        expect(() => example().filterByType()).toThrow();
-      });
-
       it('should allow to filter and get by custom predicate', () => {
         expect(
           example().withProps({welcomeText: 'hi'})

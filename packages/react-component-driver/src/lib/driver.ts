@@ -1,50 +1,19 @@
-function guard(arg, name) {
-  if (!arg) {
-    throw new Error(`Expecting ${name}, got ${arg} of type ${typeof arg}`);
-  }
-}
+import {Backend, Child, ChildNode, Render} from './backends/types';
+import {Core} from './core';
 
-function queryMethods({filterBy, filterByType, filterByTestID}) {
-  return {
-    filterBy(predicate) {
-      return filterBy(predicate, this.getComponent());
-    },
-    getBy(predicate) {
-      return this.filterBy(predicate)[0];
-    },
-    filterByID(id) {
-      guard(id, 'testID');
-      return filterByTestID(id, this.getComponent());
-    },
-    getByID(id) {
-      guard(id, 'testID');
-      return this.filterByID(id)[0];
-    },
-    filterByType(type) {
-      guard(type, 'type');
-      return filterByType(type, this.getComponent());
-    },
-    getByType(type) {
-      guard(type, 'type');
-      return this.filterByType(type)[0];
-    }
-  };
-}
-
-export function componentDriver(backend) {
-  const {renderComponent} = backend;
-
-  return function factory(component, methods = {}) {
+export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
+  const {renderComponent, filterBy, filterByType, filterByTestID} = core;
+  return function factory<P>(component: React.ComponentClass<P>, methods?: any) {
     return function driver() {
-      let _component;
-      let _props = {};
+      let _component: Renderer | Render | null = null;
+      let _props: Partial<P> = {};
       let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
       function render() {
         if (!_component) {
           _component = renderComponent(
             component,
-            _props,
+            _props as P,
             {createNodeMock: _createNodeMock}
           );
         }
@@ -53,7 +22,7 @@ export function componentDriver(backend) {
 
       return {
         props: {},
-        attachTo(component) {
+        attachTo(component: ChildNode) {
           if (!component) {
             throw new Error(
               'Expected to attach to something, got "' +
@@ -64,7 +33,7 @@ export function componentDriver(backend) {
           this.props = component.props;
           return this;
         },
-        withProps(props) {
+        withProps(props: Partial<P>) {
           this.props = _props = props;
           return this;
         },
@@ -75,11 +44,24 @@ export function componentDriver(backend) {
           render();
           return this;
         },
-        withNodeMocker(createNodeMock) {
-          _createNodeMock = createNodeMock;
-          return this;
+        filterBy(predicate: (node: Child) => boolean) {
+          return filterBy(predicate, this.getComponent());
         },
-        ...queryMethods(backend),
+        getBy(predicate: (node: Child) => boolean) {
+          return this.filterBy(predicate)[0];
+        },
+        filterByID(id: string | RegExp) {
+          return filterByTestID(id, this.getComponent());
+        },
+        getByID(id: string | RegExp) {
+          return this.filterByID(id)[0];
+        },
+        filterByType(type: string) {
+          return filterByType(type, this.getComponent());
+        },
+        getByType(type: string) {
+          return this.filterByType(type)[0];
+        },
         ...methods
       };
     };

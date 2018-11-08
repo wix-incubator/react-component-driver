@@ -1,1 +1,1 @@
-module.exports = require('./dist/full-render');
+module.exports = require('./dist/full-render').default;

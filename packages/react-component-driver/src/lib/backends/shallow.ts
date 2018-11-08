@@ -1,5 +1,6 @@
 import {createRenderer, ShallowRenderer as Renderer} from 'react-test-renderer/shallow';
 import {Render} from './types';
+import {flatten} from '../utils/flatten';
 
 // `twice' is needed for redux case when shallow rendering connected component.
 // First render returns <Connected/> and second unwraps it to get what you
@@ -66,8 +67,4 @@ function maybeToString(node: any) {
     return null;
   }
   return node;
-}
-
-function flatten<X>(arrays: X[][]): X[] {
-  return Array.prototype.concat.call([] as X[], ...arrays);
 }
