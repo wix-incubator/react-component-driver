@@ -1,12 +1,15 @@
-export default backend => {
+import fullRender = require('./backends/full-render');
+import {InitialRender, Node} from './backends/types';
+
+export default (backend: typeof fullRender) => {
   const { toJSON } = backend;
 
-  function getTestID(node) {
-    const props = node && node.props || {};
+  function getTestID(node: Node) {
+    const props = node && typeof node === 'object' ? node.props : {};
     return props.testID || props['data-test-id'];
   }
 
-  function getTextNodes(tree) {
+  function getTextNodes(tree: Node) {
     return filterBy(node => typeof node === 'string' || typeof node === 'number', tree);
   }
 
@@ -22,9 +25,9 @@ export default backend => {
     return filterBy(node => node.type === type, tree);
   }
 
-  function filterBy(predicate, tree) {
+  function filterBy(predicate: (node: Node) => boolean, tree: InitialRender) {
     const json = toJSON(tree);
-    const f = (acc, node) => predicate(node) ? acc.concat(node) : acc;
+    const f = (acc: Node[], node: Node) => predicate(node) ? acc.concat(node) : acc;
     if (Array.isArray(json)) {
       return flatten(json.map((node) => tree_fold(node, [], f)));
     } else if (isIterable(json)) {
@@ -47,24 +50,31 @@ export default backend => {
   };
 };
 
-function flatten(arrays) {
-  return [].concat(...arrays);
+function flatten<X>(arrays: X[][]): X[] {
+  return Array.prototype.concat.call([] as X[], ...arrays);
 }
 
 // XXX: full renderer returns array like object if array is used for root
 // element. Children is supposed to always be empty.
-function isIterable(json) {
+function isIterable(json: any): boolean {
   return json && json[0] && json.children && json.children.length === 0;
 }
 
-function tree_fold(node, acc, f) {
+function get_children(node: Node) {
+  if (node && typeof node === 'object') {
+    return node.children || [];
+  }
+  return [];
+}
+
+function tree_fold<R>(node: Node, acc: R, f: (acc: R, node: Node) => R): R {
   return list_fold(
-    node.children || [],
+    get_children(node),
     f(acc, node),
     (acc, node) => tree_fold(node, acc, f));
 }
 
-function list_fold(list, acc, f) {
+function list_fold<X, R>(list: X[], acc: R, f: (acc: R, x: X) => R): R {
   for (let i = 0; i < list.length; i++) {
     acc = f(acc, list[i]);
   }

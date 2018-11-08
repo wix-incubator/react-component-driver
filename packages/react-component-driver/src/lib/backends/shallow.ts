@@ -1,10 +1,11 @@
-import ShallowRenderer from 'react-test-renderer/shallow';
+import {createRenderer, ShallowRenderer as Renderer} from 'react-test-renderer/shallow';
+import {Render} from './types';
 
 // `twice' is needed for redux case when shallow rendering connected component.
 // First render returns <Connected/> and second unwraps it to get what you
 // actually want.
-export function render(element, twice) {
-  const renderer = new ShallowRenderer();
+export function render<P = {}>(element: React.ReactElement<P>, twice?: boolean): Renderer {
+  const renderer = createRenderer()
   renderer.render(element);
   if (twice === true) {
     return render(renderer.getRenderOutput());
@@ -12,24 +13,24 @@ export function render(element, twice) {
   return renderer;
 }
 
-export function toJSON(component) {
-  if (isRendered(component)) {
-    return maybeToString(component);
+export function toJSON(component: Render | Renderer): Render {
+  if (typeof component === 'object' && component && 'getRenderOutput' in component) {
+    return _toJSON(component.getRenderOutput()) || '';
   }
-  return _toJSON(component.getRenderOutput()) || '';
+  return maybeToString(component);
 }
 
-function getComponentName(component) {
+function getComponentName(component: any) {
   return component.displayName || component.name;
 }
 
-function getTypeName(typeObject) {
+function getTypeName(typeObject: any) {
   return typeObject.render ?
     getComponentName(typeObject.render) :
     getComponentName(typeObject);
 }
 
-function _toJSON(node) {
+export function _toJSON(node: any): any {
   if (Array.isArray(node)) {
     return node.map(_toJSON);
   }
@@ -41,7 +42,7 @@ function _toJSON(node) {
   } else {
     const type = node.type;
     const typeName = typeof type === 'string' ? type : getTypeName(type);
-    const props = Object.assign({}, node.props);
+    const props = {...node.props};
     delete props.children;
     const children = node.props.children;
     return {
@@ -54,15 +55,11 @@ function _toJSON(node) {
   }
 }
 
-function notNull(x) {
+function notNull(x: any) {
   return x !== null;
 }
 
-function isRendered(component) {
-  return !component || !component.getRenderOutput;
-}
-
-function maybeToString(node) {
+function maybeToString(node: any) {
   if (typeof node === 'number') {
     return node.toString();
   } else if (node == null) {
@@ -71,14 +68,6 @@ function maybeToString(node) {
   return node;
 }
 
-function flatten(elements) {
-  const result = [];
-  elements.forEach((element) => {
-    if (Array.isArray(element)) {
-      Array.prototype.push.apply(result, element);
-    } else {
-      result.push(element);
-    }
-  });
-  return result;
+function flatten<X>(arrays: X[][]): X[] {
+  return Array.prototype.concat.call([] as X[], ...arrays);
 }
