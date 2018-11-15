@@ -19,7 +19,7 @@ export interface ComponentDriverI<Props> {
 }
 
 export class BaseComponentDriver<Props, Renderer, Options> implements ComponentDriverI<Props> {
-  private rendered: Render | null = null;
+  private rendered: Renderer | null = null;
   private props: Partial<Props> = {};
 
   constructor(private core: Core<Renderer, Options>, private Component: React.ComponentClass<Props>) {
@@ -27,7 +27,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements ComponentD
 
   private getRendered() {
     if (this.rendered == null) {
-      this.rendered = this.core.toJSON(this.core.renderComponent(this.Component, this.props as Props));
+      this.rendered = this.core.renderComponent(this.Component, this.props as Props);
     }
     return this.rendered;
   }
@@ -38,7 +38,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements ComponentD
   }
 
   getComponent() {
-    return this.getRendered();
+    return this.core.toJSON(this.getRendered());
   }
 
   render() {
@@ -75,19 +75,21 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
   return function factory<P>(component: React.ComponentClass<P>, methods?: any) {
     return function driver() {
+      let isAttached = false;
+      let _renderer: Renderer | null = null;
       let _component: Render | null = null;
       let _props: Partial<P> = {};
       let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
       function render() {
-        if (!_component) {
-          _component = toJSON(renderComponent(
+        if (!_renderer && component) {
+          _renderer = renderComponent(
             component,
             _props as P,
             {createNodeMock: _createNodeMock}
-          ));
+          );
         }
-        return _component;
+        return _renderer;
       }
 
       return {
@@ -99,6 +101,7 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
                 component + '" of type ' + typeof component
             );
           }
+          isAttached = true;
           _component = component;
           this.props = component.props;
           return this;
@@ -108,7 +111,13 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
           return this;
         },
         getComponent() {
-          return render();
+          if (isAttached) {
+            return _component;
+          }
+          const renderer = render();
+          if (renderer) {
+            return toJSON(renderer);
+          }
         },
         render() {
           render();

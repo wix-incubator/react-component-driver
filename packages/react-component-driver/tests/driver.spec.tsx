@@ -88,6 +88,13 @@ describe('Driver', function () {
             .getBy((node) => node === 'hey')
         ).toEqual('hey');
       });
+
+      it('should re-render', () => {
+        const drv = example().withProps({welcomeText: '123'});
+        expect(drv.getText()).toEqual(['123']);
+        drv.getByID('button')!.props.onClick();
+        expect(drv.getText()).toBeUndefined();
+      });
     });
   }
 
