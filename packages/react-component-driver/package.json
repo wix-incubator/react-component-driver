@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i 2>&1",
-    "prepare": "rimraf dist && tsc -d",
-    "watch": "chokidar lib -c 'npm run prepare'"
+    "prepare": "rimraf dist && tsc -d"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "repository": "github:donataswix/react-component-driver",
