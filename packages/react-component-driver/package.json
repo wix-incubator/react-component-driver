@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i 2>&1",
-    "prepare": "rimraf dist && tsc",
+    "prepare": "rimraf dist && tsc -d",
     "watch": "chokidar lib -c 'npm run prepare'"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
@@ -20,26 +20,35 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
+    "@types/jest": "^23.3.9",
+    "@types/react": "^16.4.18",
+    "@types/react-test-renderer": "^16.0.3",
     "babel-jest": "^23.6.0",
     "chokidar-cli": "^1.2.0",
+    "fast-check": "^1.7.1",
     "jest": "^23.0.0",
+    "jest-config": "^23.6.0",
     "metro-react-native-babel-preset": "^0.48.1",
     "react": "^16.5.2",
     "react-native": "^0.57.3",
     "react-test-renderer": "^16.5.0",
     "rimraf": "^2.6.2",
-    "typescript": "^3.1.6",
-    "@types/react": "^16.4.18",
-    "@types/react-test-renderer": "^16.0.3",
-    "fast-check": "^1.7.1"
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.1.6"
   },
   "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
     "preset": "react-native",
     "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "clearMocks": true,
-    "testRegex": "tests/.*\\.spec\\.js",
+    "testRegex": "tests/.*\\.spec\\.(ts|tsx|js)",
     "watchPathIgnorePatterns": [
       "<rootDir>/src/"
     ]

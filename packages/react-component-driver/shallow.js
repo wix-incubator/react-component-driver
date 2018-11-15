@@ -1,1 +1,1 @@
-module.exports = require('./dist/shallow').default;
+module.exports = require('./dist/shallow');

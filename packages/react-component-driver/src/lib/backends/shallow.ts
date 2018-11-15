@@ -14,11 +14,8 @@ export function render<P = {}>(element: React.ReactElement<P>, twice?: boolean):
   return renderer;
 }
 
-export function toJSON(component: Render | Renderer): Render {
-  if (typeof component === 'object' && component && 'getRenderOutput' in component) {
-    return _toJSON(component.getRenderOutput()) || '';
-  }
-  return maybeToString(component);
+export function toJSON(component: Renderer): Render {
+  return _toJSON(component.getRenderOutput()) || '';
 }
 
 function getComponentName(component: any) {
