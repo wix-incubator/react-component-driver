@@ -1,10 +1,11 @@
 import {formDriver} from './form.driver';
+import {ChangeEvent} from 'redux-component-driver/node_modules/@types/react';
 
 describe('Form', () => {
   it('uses `testID` for container element', () => {
     const testID = Math.random().toString();
-    const form = formDriver().withProps({testID});
-    expect(form.getByID(testID)).to.be.truthy();
+    const form = formDriver().withProps({'data-test-id': testID});
+    expect(form.getByID(testID)).to.be.ok;
   });
 
   it('should initialize input value with `input` prop', () => {
@@ -16,7 +17,7 @@ describe('Form', () => {
   it('should invoke `onInputChange` when input value changes', () => {
     const onInputChange = sinon.stub();
     const form = formDriver().withProps({onInputChange});
-    form.invokeOnInputChange('some value');
+    form.invokeOnInputChange({target: {value: 'some value'}} as ChangeEvent<HTMLInputElement>);
     expect(onInputChange).to.be.calledWith('some value');
   });
 

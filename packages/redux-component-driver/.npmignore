@@ -1,4 +1,3 @@
 .nvmrc
-.babelrc
 tests/
-
+tsconfig.json

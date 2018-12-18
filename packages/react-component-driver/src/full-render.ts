@@ -1,7 +1,7 @@
 import {ReactTestRenderer as Renderer} from 'react-test-renderer';
 
 import * as fullRenderBackend from './lib/backends/full-render';
-import {Render, RChild} from './lib/backends/types';
+import {Render, Child, RenderedNode} from './lib/backends/types';
 import recodr from './lib/index';
 import withContext from './lib/utils/context';
 
@@ -26,7 +26,7 @@ function getJSON(comp: Component): Render {
   return comp;
 }
 
-function filterBy(p: (node: RChild) => boolean, comp: Component) {
+function filterBy(p: (node: Child) => boolean, comp: Component) {
   return _filterBy(p, getJSON(comp));
 }
 
@@ -43,6 +43,9 @@ function getTextNodes(comp: Component) {
 }
 
 export {
+  Child,
+  RenderedNode,
+  Component,
   ComponentDriver,
   componentDriver,
   filterBy,

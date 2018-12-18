@@ -3,18 +3,18 @@ export interface Backend<Renderer, Options> {
   toJSON(component: Renderer): Render;
 }
 
-export interface RNode {
+export interface RenderedNode {
   type: string;
   props: { [propName: string]: any };
-  children: null | RChild[];
+  children: null | Child[];
 }
 
-export type RChild = RNode | string;
+export type Child = RenderedNode | string;
 
-export type Render = null | RChild | RChild[];
+export type Render = null | Child | Child[];
 
 
-export function render_map(render: Render, f: (node: RChild) => RChild): Render {
+export function render_map(render: Render, f: (node: Child) => Child): Render {
   if (render) {
     if (Array.isArray(render)) {
       return render.map(child => tree_map(child, f))
@@ -27,7 +27,7 @@ export function render_map(render: Render, f: (node: RChild) => RChild): Render 
   return render;
 }
 
-function tree_map(node: RChild, f: (node: RChild) => RChild): RChild {
+function tree_map(node: Child, f: (node: Child) => Child): Child {
   if (typeof node === 'string') {
     return f(node);
   }

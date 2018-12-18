@@ -1,18 +1,18 @@
 import fullRender = require('./backends/full-render');
-import {Backend, Render, RChild, RNode, render_map} from './backends/types';
+import {Backend, Render, Child, RenderedNode, render_map} from './backends/types';
 import {flatten} from './utils/flatten';
 
 export interface Queries {
-  getTextNodes(tree: Render): RChild[];
-  filterByTestID(id: string | RegExp, tree: Render): RNode[];
-  filterByType(type: string, tree: Render): RNode[];
-  filterBy(predicate: (node: RChild) => boolean, tree: Render): RChild[];
+  getTextNodes(tree: Render): Child[];
+  filterByTestID(id: string | RegExp, tree: Render): RenderedNode[];
+  filterByType(type: string, tree: Render): RenderedNode[];
+  filterBy(predicate: (node: Child) => boolean, tree: Render): Child[];
 }
 
 export default function queries<R, O>(backend: Backend<R, O>): Queries {
   const { toJSON } = backend;
 
-  function getTestID(node: RChild): string | undefined {
+  function getTestID(node: Child): string | undefined {
     const props = node && typeof node === 'object' ? node.props : {};
     return props.testID || props['data-test-id'];
   }
@@ -21,26 +21,26 @@ export default function queries<R, O>(backend: Backend<R, O>): Queries {
     return filterBy(node => typeof node === 'string' || typeof node === 'number', tree);
   }
 
-  function filterByTestID(id: string | RegExp, tree: Render): RNode[] {
+  function filterByTestID(id: string | RegExp, tree: Render): RenderedNode[] {
     const predicate =
       id.constructor === RegExp ?
-      ((node: RChild) => {
+      ((node: Child) => {
         const testID = getTestID(node);
         if (testID) {
           return (id as RegExp).test(testID);
         }
         return false;
       }) :
-      ((node: RChild) => getTestID(node) === id);
-    return (filterBy(predicate, tree) as unknown[]) as RNode[];
+      ((node: Child) => getTestID(node) === id);
+    return (filterBy(predicate, tree) as unknown[]) as RenderedNode[];
   }
 
-  function filterByType(type: string, tree: Render): RNode[] {
-    return (filterBy(node => typeof node === 'object' && node.type === type, tree) as unknown[]) as RNode[];
+  function filterByType(type: string, tree: Render): RenderedNode[] {
+    return (filterBy(node => typeof node === 'object' && node.type === type, tree) as unknown[]) as RenderedNode[];
   }
 
-  function filterBy(predicate: (node: RChild) => boolean, tree: Render) {
-    const f = (acc: RChild[], node: RChild) => predicate(node) ? acc.concat(node) : acc;
+  function filterBy(predicate: (node: Child) => boolean, tree: Render) {
+    const f = (acc: Child[], node: Child) => predicate(node) ? acc.concat(node) : acc;
     if (Array.isArray(tree)) {
       return flatten(tree.map((node) => tree_fold(node, [], f)));
     } else if (tree) {
@@ -57,14 +57,14 @@ export default function queries<R, O>(backend: Backend<R, O>): Queries {
   };
 };
 
-function get_children(node: RChild) {
+function get_children(node: Child) {
   if (node && typeof node === 'object') {
     return node.children || [];
   }
   return [];
 }
 
-function tree_fold<R>(node: RChild, acc: R, f: (acc: R, node: RChild) => R): R {
+function tree_fold<R>(node: Child, acc: R, f: (acc: R, node: Child) => R): R {
   return list_fold(
     get_children(node),
     f(acc, node),

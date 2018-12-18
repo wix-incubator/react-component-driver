@@ -3,7 +3,7 @@ import {itemDriver} from './item.driver';
 describe('Item', () => {
   it('uses `testID` property to mark container', () => {
     const testID = Math.random().toString();
-    expect(itemDriver().withProps({testID}).getByID(testID)).not.to.be.undefined();
+    expect(itemDriver().withProps({'data-test-id': testID}).getByID(testID)).to.be.ok;
   });
 
   it('renders index', () => {

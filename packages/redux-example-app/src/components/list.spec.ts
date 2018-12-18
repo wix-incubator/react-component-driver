@@ -3,7 +3,7 @@ import {listDriver} from './list.driver';
 describe('List', () => {
   it('uses `testID` for container', () => {
     const testID = Math.random().toString();
-    expect(listDriver().withProps({testID}).getByID(testID)).to.be.truthy();
+    expect(listDriver().withProps({'data-test-id': testID}).getByID(testID)).to.be.ok;
   });
 
   describe('when empty', () => {
@@ -20,7 +20,7 @@ describe('List', () => {
 
   it('renders items in order', () => {
     const items = ['hi', 'how', 'are', 'you'];
-    expect(listDriver().withProps({items}).getItems()).to.deep.equal([
+    expect(listDriver().withProps({items, 'data-test-id': 'list'}).getItems()).to.deep.equal([
       ['1', 'hi'], ['2', 'how'], ['3', 'are'], ['4', 'you']
     ]);
   });

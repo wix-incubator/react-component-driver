@@ -1,6 +1,6 @@
 import * as React from 'react';
 import queryFactory, {Queries} from './query';
-import {Backend, Render, RChild} from './backends/types';
+import {Backend, Render, Child} from './backends/types';
 
 export interface Core<Renderer, Options> extends Queries {
   toJSON(renderer: Renderer): Render;

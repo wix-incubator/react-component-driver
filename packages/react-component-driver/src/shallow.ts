@@ -1,6 +1,6 @@
 import {ShallowRenderer as Renderer} from 'react-test-renderer/shallow';
 
-import {Render, RChild} from './lib/backends/types';
+import {Render, Child, RenderedNode} from './lib/backends/types';
 import * as shallowBackend from './lib/backends/shallow';
 import recodr from './lib/index';
 
@@ -25,7 +25,7 @@ function getJSON(comp: Component): Render {
   return comp;
 }
 
-function filterBy(p: (node: RChild) => boolean, comp: Component) {
+function filterBy(p: (node: Child) => boolean, comp: Component) {
   return _filterBy(p, getJSON(comp));
 }
 
@@ -42,6 +42,9 @@ function getTextNodes(comp: Component) {
 }
 
 export {
+  Child,
+  RenderedNode,
+  Component,
   ComponentDriver,
   componentDriver,
   filterBy,
