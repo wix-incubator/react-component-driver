@@ -1,9 +1,8 @@
 const sinon = require('sinon');
 const chai = require('chai');
+const sinonChai = require('sinon-chai');
 
-chai.use(require('sinon-chai'));
-chai.use(require('dirty-chai'));
-chai.use(require('chai-truthy'));
+chai.use(sinonChai);
 
 global.expect = chai.expect;
 global.sinon = sinon;

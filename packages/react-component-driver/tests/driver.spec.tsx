@@ -1,38 +1,62 @@
-jest.useFakeTimers();
-jest.mock('Text', () => 'Text');
-jest.mock('View', () => 'View');
-
-import Example from './components/example';
+import * as React from 'react';
 import * as shallow from '../shallow';
 import * as full from '../index';
+import {ComponentDriverI} from '../dist/lib/driver';
+
+type ExampleProps = {welcomeText: string};
+type ExampleState = {hide: boolean};
+
+export default class Example extends React.Component<ExampleProps, ExampleState> {
+  constructor(props: ExampleProps) {
+    super(props);
+    this.state = {hide: false};
+  }
+
+  hide() {
+    this.setState({hide: true});
+  }
+
+  render() {
+    return (
+      <div>
+        <button data-test-id="button" onClick={this.hide.bind(this)}></button>
+        {this.state.hide ? <span/> : <span data-test-id="welcome_text">{this.props.welcomeText}</span>}
+      </div>
+    );
+  }
+}
 
 describe('Driver', function () {
-  [
-    [shallow, '/'],
-    [full, '/full-render'],
-  ].forEach(([{componentDriver}, name]) => {
+  function driverTests<Props>(name: string, ComponentDriver: typeof full.ComponentDriver) {
+    class ExampleDriver extends ComponentDriver<ExampleProps> {
+      constructor() {
+        super(Example);
+      }
+
+      getText() {
+        const node = this.getByID('welcome_text');
+        return node && node.children;
+      }
+    }
+
     describe('For Component From ' + name, function () {
-      const example = componentDriver(Example, {
-        getText() {
-          return this.getByType('Text').children;
-        },
-      });
+      const example = () => new ExampleDriver();
 
       it('should render component', function () {
         const welcomeText = 'Hello, World!';
         const drv = example().withProps({welcomeText});
         expect(drv.filterBy(() => true)[0]).toEqual({
-          type: 'View',
+          type: 'div',
           props: {},
           children: [
             {
-              type: 'View',
-              props: {testID: 'button', onPress: expect.any(Function)},
+              type: 'button',
+              props: {'data-test-id': 'button', onClick: expect.any(Function)},
               children: []
             },
             {
-              type: 'Text',
-              props: {testID: 'welcome_text'},
+              type: 'span',
+              props: {'data-test-id': 'welcome_text'},
               children: [welcomeText]
             },
           ]
@@ -68,9 +92,12 @@ describe('Driver', function () {
       it('should re-render', () => {
         const drv = example().withProps({welcomeText: '123'});
         expect(drv.getText()).toEqual(['123']);
-        drv.getByID('button').props.onPress();
-        expect(drv.getText()).toEqual([]);
+        drv.getByID('button')!.props.onClick();
+        expect(drv.getText()).toBeUndefined();
       });
     });
-  });
+  }
+
+  driverTests('Full', full.ComponentDriver);
+  driverTests('Shallow', shallow.ComponentDriver);
 });
