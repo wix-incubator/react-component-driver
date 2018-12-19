@@ -3,8 +3,8 @@ import {Core} from './core';
 import {Component} from '../shallow';
 
 export interface DriversI<Props> {
-  ComponentDriver: new <Props>(component: React.ComponentClass<Props>) => ComponentDriverI<Props>;
-  componentDriver<Props>(component: React.ComponentClass<Props>, methods?: any): () => any;
+  ComponentDriver: new <Props>(component: React.ComponentType<Props>) => ComponentDriverI<Props>;
+  componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): () => any;
 }
 
 export interface ComponentDriverI<Props> {
@@ -26,7 +26,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements ComponentD
   private attached: Child | null = null;
   props: Partial<Props> = {};
 
-  constructor(private core: Core<Renderer, Options>, private Component: React.ComponentClass<Props>) {
+  constructor(private core: Core<Renderer, Options>, private Component: React.ComponentType<Props>) {
   }
 
   private getRenderer() {
@@ -87,7 +87,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements ComponentD
 
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
-  return function factory<P>(component: React.ComponentClass<P>, methods?: any) {
+  return function factory<P>(component: React.ComponentType<P>, methods?: any) {
     return function driver() {
       let isAttached = false;
       let _renderer: Renderer | null = null;

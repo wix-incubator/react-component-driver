@@ -4,6 +4,7 @@
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
   "scripts": {
+    "pretest": "tsc -d",
     "test": "jest -i 2>&1",
     "prepare": "rimraf dist && tsc -d"
   },

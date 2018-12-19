@@ -6,7 +6,7 @@ export default function recodr<Props, Renderer, Options>(backend: Backend<Render
   const utils = core(backend);
 
   class ComponentDriver<Props> extends BaseComponentDriver<Props, Renderer, Options> implements ComponentDriverI<Props> {
-    constructor(component: React.ComponentClass<Props>) {
+    constructor(component: React.ComponentType<Props>) {
       super(utils, component);
     }
   }
