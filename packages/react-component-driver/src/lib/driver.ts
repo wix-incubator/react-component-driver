@@ -2,12 +2,12 @@ import {Backend, Child, RenderedNode, Render} from './backends/types';
 import {Core} from './core';
 import {Component} from '../shallow';
 
-export interface DriversI<Props> {
-  ComponentDriver: new <Props>(component: React.ComponentType<Props>) => ComponentDriverI<Props>;
+export interface Drivers<Props> {
+  ComponentDriver: new <Props>(component: React.ComponentType<Props>) => TestDriveableComponent<Props>;
   componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): () => any;
 }
 
-export interface ComponentDriverI<Props> {
+export interface TestDriveableComponent<Props> {
   props: Partial<Props>;
   withProps(props: Partial<Props>): this;
   getComponent(): Render;
@@ -22,7 +22,7 @@ export interface ComponentDriverI<Props> {
   unmount(): void;
 }
 
-export class BaseComponentDriver<Props, Renderer, Options> implements ComponentDriverI<Props> {
+export class BaseComponentDriver<Props, Renderer, Options> implements TestDriveableComponent<Props> {
   private renderer: Renderer | null = null;
   private attached: Child | null = null;
   props: Partial<Props> = {};
