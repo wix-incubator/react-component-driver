@@ -71,6 +71,12 @@ describe('Driver', function () {
         drv.getByID('button').props.onPress();
         expect(drv.getText()).toEqual([]);
       });
+
+      it('should unmount', () => {
+        const onUnmount = jest.fn();
+        example().withProps({onUnmount}).unmount();
+        expect(onUnmount).toBeCalled();
+      });
     });
   });
 });

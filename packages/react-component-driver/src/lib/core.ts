@@ -6,10 +6,11 @@ export interface Core<Renderer, Options> extends Queries {
   toJSON(renderer: Renderer): Render;
   render<P>(element: React.ReactElement<P>, options?: Options | undefined): Renderer;
   renderComponent<P>(comp: React.ComponentType<P>, props: P, ...rest: any[]): Renderer;
+  unmount(renderer: Renderer): void;
 }
 
 export default function core<Renderer, Options>(backend: Backend<Renderer, Options>): Core<Renderer, Options> {
-  const {render, toJSON} = backend;
+  const {render, toJSON, unmount} = backend;
 
   function renderComponent<P>(comp: React.ComponentType<P>, props: P, ...rest: any[]) {
     return render(React.createElement(comp, props), ...rest);
@@ -19,6 +20,7 @@ export default function core<Renderer, Options>(backend: Backend<Renderer, Optio
     toJSON,
     render,
     renderComponent,
+    unmount,
     ...queryFactory(backend),
   };
 };

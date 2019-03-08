@@ -19,6 +19,7 @@ export interface ComponentDriverI<Props> {
   filterByType(type: string): RenderedNode[];
   getByType(type: string): RenderedNode | undefined;
   attachTo(node: Child): this;
+  unmount(): void;
 }
 
 export class BaseComponentDriver<Props, Renderer, Options> implements ComponentDriverI<Props> {
@@ -53,6 +54,10 @@ export class BaseComponentDriver<Props, Renderer, Options> implements ComponentD
     } else {
       return this.core.toJSON(this.getRenderer());
     }
+  }
+
+  unmount() {
+    this.core.unmount(this.getRenderer());
   }
 
   render() {
@@ -132,6 +137,13 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
           if (renderer) {
             return toJSON(renderer);
           }
+        },
+        unmount() {
+          let renderer;
+          if (renderer = render()) {
+            core.unmount(renderer);
+          }
+          return this;
         },
         render() {
           render();

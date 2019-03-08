@@ -11,6 +11,12 @@ export default class Example extends Component {
     this.setState({hide: true});
   }
 
+  componentWillUnmount() {
+    if (this.props.onUnmount) {
+      this.props.onUnmount();
+    }
+  }
+
   render() {
     return (
       <View>

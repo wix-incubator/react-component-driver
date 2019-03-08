@@ -18,6 +18,10 @@ export function toJSON(component: Renderer): Render {
   return _toJSON(component.getRenderOutput()) || '';
 }
 
+export function unmount(renderer: Renderer): void {
+  return renderer.unmount();
+}
+
 function getComponentName(component: any) {
   return component.displayName || component.name;
 }

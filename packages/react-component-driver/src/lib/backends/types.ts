@@ -1,5 +1,6 @@
 export interface Backend<Renderer, Options> {
   render<P>(element: React.ReactElement<P>, options?: Options): Renderer;
+  unmount(renderer: Renderer): void;
   toJSON(component: Renderer): Render;
 }
 

@@ -3,13 +3,19 @@ import * as shallow from '../shallow';
 import * as full from '../index';
 import {ComponentDriverI} from '../dist/lib/driver';
 
-type ExampleProps = {welcomeText: string};
+type ExampleProps = {welcomeText: string, onUnmount?: () => {}};
 type ExampleState = {hide: boolean};
 
 export default class Example extends React.Component<ExampleProps, ExampleState> {
   constructor(props: ExampleProps) {
     super(props);
     this.state = {hide: false};
+  }
+
+  componentWillUnmount() {
+    if (this.props.onUnmount) {
+      this.props.onUnmount();
+    }
   }
 
   hide() {
@@ -94,6 +100,12 @@ describe('Driver', function () {
         expect(drv.getText()).toEqual(['123']);
         drv.getByID('button')!.props.onClick();
         expect(drv.getText()).toBeUndefined();
+      });
+
+      it('should unmount', () => {
+        const onUnmount = jest.fn();
+        example().withProps({onUnmount}).unmount();
+        expect(onUnmount).toBeCalled();
       });
     });
   }
