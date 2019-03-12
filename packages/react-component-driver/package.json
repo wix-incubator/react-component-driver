@@ -1,6 +1,6 @@
 {
   "name": "react-component-driver",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "React Test Renderer utils to aid component tests and TDD cycle.",
   "main": "index.js",
   "scripts": {
