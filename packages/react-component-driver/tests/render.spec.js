@@ -11,6 +11,7 @@ import * as shallow from '../shallow';
 import * as full from '../index';
 
 function test(suiteName, {
+  toJSON,
   renderComponent,
   getTextNodes,
   filterBy,
@@ -59,6 +60,10 @@ function test(suiteName, {
     it('should know how to deal with null', function () {
       const example = renderComponent(Null);
       filterByType('Text', example);
+    });
+
+    it('should render null', function () {
+      expect(toJSON(renderComponent(Null))).toBeNull();
     });
 
     it('should know how to deal with undefined', function () {

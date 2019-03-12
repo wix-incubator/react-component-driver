@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as shallow from '../shallow';
 import * as full from '../index';
-import {ComponentDriverI} from '../dist/lib/driver';
 
 type ExampleProps = {welcomeText: string, onUnmount?: () => {}};
 type ExampleState = {hide: boolean};

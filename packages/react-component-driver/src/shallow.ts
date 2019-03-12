@@ -53,4 +53,5 @@ export {
   getTextNodes,
   render,
   renderComponent,
+  toJSON,
 };

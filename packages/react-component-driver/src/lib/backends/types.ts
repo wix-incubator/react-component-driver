@@ -22,9 +22,6 @@ export function render_map(render: Render, f: (node: Child) => Child): Render {
     }
     return tree_map(render, f);
   }
-  if (render === null) {
-    return '';
-  }
   return render;
 }
 

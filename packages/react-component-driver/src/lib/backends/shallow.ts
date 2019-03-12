@@ -15,7 +15,7 @@ export function render<P = {}>(element: React.ReactElement<P>, twice?: boolean):
 }
 
 export function toJSON(component: Renderer): Render {
-  return _toJSON(component.getRenderOutput()) || '';
+  return _toJSON(component.getRenderOutput());
 }
 
 export function unmount(renderer: Renderer): void {

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {Backend, Child, RenderedNode, Render} from './backends/types';
 import {Core} from './core';
 import {Component} from '../shallow';
@@ -18,13 +19,13 @@ export interface TestDriveableComponent<Props> {
   getByID(id: string | RegExp): RenderedNode | undefined;
   filterByType(type: string): RenderedNode[];
   getByType(type: string): RenderedNode | undefined;
-  attachTo(node: Child): this;
+  attachTo(node: Render): this;
   unmount(): void;
 }
 
 export class BaseComponentDriver<Props, Renderer, Options> implements TestDriveableComponent<Props> {
   private renderer: Renderer | null = null;
-  private attached: Child | null = null;
+  private attached: Render | null = null;
   props: Partial<Props> = {};
 
   constructor(private core: Core<Renderer, Options>, private Component: React.ComponentType<Props>) {
@@ -37,9 +38,9 @@ export class BaseComponentDriver<Props, Renderer, Options> implements TestDrivea
     return this.renderer;
   }
 
-  attachTo(component: Child) {
+  attachTo(component: Render) {
     this.attached = component;
-    this.props = typeof component === 'string' ? {} : component.props as Partial<Props>;
+    this.props = component && typeof component !== 'string' && 'props' in component ? component.props as Partial<Props> : {};
     return this;
   }
 
@@ -93,7 +94,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements TestDrivea
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
   return function factory<P>(component: React.ComponentType<P>, methods?: any) {
-    return function driver() {
+    return function driver(): TestDriveableComponent<P> {
       let isAttached = false;
       let _renderer: Renderer | null = null;
       let _component: Render | null = null;
@@ -113,16 +114,10 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
 
       return {
         props: {},
-        attachTo(component: RenderedNode) {
-          if (!component) {
-            throw new Error(
-              'Expected to attach to something, got "' +
-                component + '" of type ' + typeof component
-            );
-          }
+        attachTo(component: RenderedNode | null) {
           isAttached = true;
           _component = component;
-          this.props = component.props;
+          this.props = component ? (component.props as Partial<P>) : {};
           return this;
         },
         withProps(props: Partial<P>) {
