@@ -49,7 +49,7 @@ describe('Driver', function () {
 
       it('should render component', function () {
         const welcomeText = 'Hello, World!';
-        const drv = example().withProps({welcomeText});
+        const drv = example().setProps({welcomeText});
         expect(drv.filterBy(() => true)[0]).toEqual({
           type: 'div',
           props: {},
@@ -69,7 +69,7 @@ describe('Driver', function () {
       });
 
       it('should allow to set props', function () {
-        expect(example().withProps({welcomeText: 'Hello'}).getText())
+        expect(example().setProps({welcomeText: 'Hello'}).getText())
           .toEqual(['Hello']);
       });
 
@@ -85,17 +85,17 @@ describe('Driver', function () {
 
       it('should allow to filter and get by custom predicate', () => {
         expect(
-          example().withProps({welcomeText: 'hi'})
+          example().setProps({welcomeText: 'hi'})
             .filterBy((node) => node === 'hi')
         ).toEqual(['hi']);
         expect(
-          example().withProps({welcomeText: 'hey'})
+          example().setProps({welcomeText: 'hey'})
             .getBy((node) => node === 'hey')
         ).toEqual('hey');
       });
 
       it('should re-render', () => {
-        const drv = example().withProps({welcomeText: '123'});
+        const drv = example().setProps({welcomeText: '123'});
         expect(drv.getText()).toEqual(['123']);
         drv.getByID('button')!.props.onClick();
         expect(drv.getText()).toBeUndefined();
@@ -103,7 +103,7 @@ describe('Driver', function () {
 
       it('should unmount', () => {
         const onUnmount = jest.fn();
-        example().withProps({onUnmount}).unmount();
+        example().setProps({onUnmount}).unmount();
         expect(onUnmount).toBeCalled();
       });
     });

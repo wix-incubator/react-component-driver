@@ -10,7 +10,7 @@ export interface Drivers<Props> {
 
 export interface DriveableComponent<Props> {
   props: Partial<Props>;
-  withProps(props: Partial<Props>): this;
+  setProps(props: Partial<Props>): this;
   getComponent(): Render;
   render(): this;
   filterBy(predicate: (node: Child) => boolean): Child[];
@@ -44,7 +44,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
     return this;
   }
 
-  withProps(props: Partial<Props>) {
+  setProps(props: Partial<Props>) {
     this.props = props;
     return this;
   }
@@ -116,7 +116,7 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
           this.props = component ? (component.props as Partial<Props>) : {};
           return this;
         },
-        withProps(props: Partial<Props>) {
+        setProps(props: Partial<Props>) {
           this.props = _props = props;
           return this;
         },
