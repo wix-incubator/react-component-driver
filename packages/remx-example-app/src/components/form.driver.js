@@ -4,7 +4,7 @@ import {Form} from './form';
 
 const {INPUT, BUTTON} = Form.TEST_ID;
 
-export const formDriver = componentDriver(Form, {
+export const formDriver = () => componentDriver(Form, {
   getNestedID(id) {
     const testID = this.props.testID || this.props['data-test-id'];
     return testID + '.' + id;

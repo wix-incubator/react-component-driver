@@ -1,7 +1,7 @@
 import {Item} from './item';
 import {componentDriver, getTextNodes} from 'react-component-driver';
 
-export const itemDriver = componentDriver(Item, {
+export const itemDriver = () => componentDriver(Item, {
   getNestedID(id) {
     return this.props['data-test-id'] + '.' + id;
   },

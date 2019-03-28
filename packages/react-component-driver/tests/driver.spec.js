@@ -12,7 +12,7 @@ describe('Driver', function () {
     [full, '/full-render'],
   ].forEach(([{componentDriver}, name]) => {
     describe('For Component From ' + name, function () {
-      const example = componentDriver(Example, {
+      const example = () => componentDriver(Example, {
         getText() {
           return this.getByType('Text').children;
         },

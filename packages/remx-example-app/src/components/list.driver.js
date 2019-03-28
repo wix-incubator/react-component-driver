@@ -8,7 +8,7 @@ const itemTestID = (node) => {
   return /\.item-\d+$/.test(testID);
 };
 
-export const listDriver = componentDriver(List, {
+export const listDriver = () => componentDriver(List, {
   getNestedID(id) {
     return this.props['data-test-id'] + '.' + id;
   },

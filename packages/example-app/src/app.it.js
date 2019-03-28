@@ -10,7 +10,7 @@ function getTestID(prefix, suffix) {
   return prefix + '.' + suffix;
 }
 
-const appDriver = componentDriver(App, {
+const appDriver = () => componentDriver(App, {
   getList() {
     return listDriver()
       .attachTo(this.getByID(App.TEST_ID.LIST))

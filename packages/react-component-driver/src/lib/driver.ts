@@ -5,7 +5,7 @@ import {Component} from '../shallow';
 
 export interface Drivers<Props> {
   ComponentDriver: new <Props>(component: React.ComponentType<Props>) => DriveableComponent<Props>;
-  componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): () => any;
+  componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): any;
 }
 
 export interface DriveableComponent<Props> {
@@ -93,71 +93,69 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
 
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
-  return function factory<Props, Methods>(component: React.ComponentType<Props>, methods?: Methods) {
-    return function driver(): DriveableComponent<Props> {
-      let isAttached = false;
-      let _renderer: Renderer | null = null;
-      let _component: Render | null = null;
-      let _props: Partial<Props> = {};
-      let _createNodeMock = () => null; // works only for react-test-renderer backend.
+  return function factory<Props, Methods>(component: React.ComponentType<Props>, methods?: Methods): DriveableComponent<Props> {
+    let isAttached = false;
+    let _renderer: Renderer | null = null;
+    let _component: Render | null = null;
+    let _props: Partial<Props> = {};
+    let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
-      function render() {
-        if (_renderer == null) {
-          _renderer = renderComponent(component, _props as Props, {createNodeMock: _createNodeMock});
-        }
-        return _renderer;
+    function render() {
+      if (_renderer == null) {
+        _renderer = renderComponent(component, _props as Props, {createNodeMock: _createNodeMock});
       }
+      return _renderer;
+    }
 
-      return {
-        props: {},
-        attachTo(component: RenderedNode | null) {
-          isAttached = true;
-          _component = component;
-          this.props = component ? (component.props as Partial<Props>) : {};
-          return this;
-        },
-        setProps(props: Partial<Props>) {
-          this.props = _props = props;
-          return this;
-        },
-        getComponent() {
-          if (isAttached) {
-            return _component;
-          } else {
-            return toJSON(render());
-          }
-        },
-        unmount() {
-          let renderer;
-          if (renderer = render()) {
-            core.unmount(renderer);
-          }
-          return this;
-        },
-        render() {
-          render();
-          return this;
-        },
-        filterBy(predicate: (node: Child) => boolean) {
-          return filterBy(predicate, this.getComponent());
-        },
-        getBy(predicate: (node: Child) => boolean) {
-          return this.filterBy(predicate)[0];
-        },
-        filterByID(id: string | RegExp) {
-          return filterByTestID(id, this.getComponent());
-        },
-        getByID(id: string | RegExp) {
-          return this.filterByID(id)[0];
-        },
-        filterByType(type: string) {
-          return filterByType(type, this.getComponent());
-        },
-        getByType(type: string) {
-          return this.filterByType(type)[0];
-        },
-        ...methods
-      };
+    return {
+      props: {},
+      attachTo(component: RenderedNode | null) {
+        isAttached = true;
+        _component = component;
+        this.props = component ? (component.props as Partial<Props>) : {};
+        return this;
+      },
+      setProps(props: Partial<Props>) {
+        this.props = _props = props;
+        return this;
+      },
+      getComponent() {
+        if (isAttached) {
+          return _component;
+        } else {
+          return toJSON(render());
+        }
+      },
+      unmount() {
+        let renderer;
+        if (renderer = render()) {
+          core.unmount(renderer);
+        }
+        return this;
+      },
+      render() {
+        render();
+        return this;
+      },
+      filterBy(predicate: (node: Child) => boolean) {
+        return filterBy(predicate, this.getComponent());
+      },
+      getBy(predicate: (node: Child) => boolean) {
+        return this.filterBy(predicate)[0];
+      },
+      filterByID(id: string | RegExp) {
+        return filterByTestID(id, this.getComponent());
+      },
+      getByID(id: string | RegExp) {
+        return this.filterByID(id)[0];
+      },
+      filterByType(type: string) {
+        return filterByType(type, this.getComponent());
+      },
+      getByType(type: string) {
+        return this.filterByType(type)[0];
+      },
+      ...methods
     };
   };
 }
