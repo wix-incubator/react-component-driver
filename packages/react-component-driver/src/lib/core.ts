@@ -4,7 +4,7 @@ import {Backend, Render, Child} from './backends/types';
 
 export interface Core<Renderer, Options> extends Queries {
   toJSON(renderer: Renderer): Render;
-  render<P>(element: React.ReactElement<P>, options?: Options | undefined): Renderer;
+  render<P>(element: React.ReactElement<P>, options?: Options): Renderer;
   renderComponent<P>(comp: React.ComponentType<P>, props: P, ...rest: any[]): Renderer;
   unmount(renderer: Renderer): void;
 }
