@@ -93,21 +93,17 @@ export class BaseComponentDriver<Props, Renderer, Options> implements TestDrivea
 
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
-  return function factory<P>(component: React.ComponentType<P>, methods?: any) {
-    return function driver(): TestDriveableComponent<P> {
+  return function factory<Props, Methods>(component: React.ComponentType<Props>, methods?: Methods) {
+    return function driver(): TestDriveableComponent<Props> {
       let isAttached = false;
       let _renderer: Renderer | null = null;
       let _component: Render | null = null;
-      let _props: Partial<P> = {};
+      let _props: Partial<Props> = {};
       let _createNodeMock = () => null; // works only for react-test-renderer backend.
 
       function render() {
-        if (!_renderer && component) {
-          _renderer = renderComponent(
-            component,
-            _props as P,
-            {createNodeMock: _createNodeMock}
-          );
+        if (_renderer == null) {
+          _renderer = renderComponent(component, _props as Props, {createNodeMock: _createNodeMock});
         }
         return _renderer;
       }
@@ -117,20 +113,18 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
         attachTo(component: RenderedNode | null) {
           isAttached = true;
           _component = component;
-          this.props = component ? (component.props as Partial<P>) : {};
+          this.props = component ? (component.props as Partial<Props>) : {};
           return this;
         },
-        withProps(props: Partial<P>) {
+        withProps(props: Partial<Props>) {
           this.props = _props = props;
           return this;
         },
         getComponent() {
           if (isAttached) {
             return _component;
-          }
-          const renderer = render();
-          if (renderer) {
-            return toJSON(renderer);
+          } else {
+            return toJSON(render());
           }
         },
         unmount() {
