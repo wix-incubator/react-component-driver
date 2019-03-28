@@ -4,11 +4,11 @@ import {Core} from './core';
 import {Component} from '../shallow';
 
 export interface Drivers<Props> {
-  ComponentDriver: new <Props>(component: React.ComponentType<Props>) => TestDriveableComponent<Props>;
+  ComponentDriver: new <Props>(component: React.ComponentType<Props>) => DriveableComponent<Props>;
   componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): () => any;
 }
 
-export interface TestDriveableComponent<Props> {
+export interface DriveableComponent<Props> {
   props: Partial<Props>;
   withProps(props: Partial<Props>): this;
   getComponent(): Render;
@@ -23,7 +23,7 @@ export interface TestDriveableComponent<Props> {
   unmount(): void;
 }
 
-export class BaseComponentDriver<Props, Renderer, Options> implements TestDriveableComponent<Props> {
+export class BaseComponentDriver<Props, Renderer, Options> implements DriveableComponent<Props> {
   private renderer: Renderer | null = null;
   private attached: Render | null = null;
   props: Partial<Props> = {};
@@ -94,7 +94,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements TestDrivea
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, filterBy, filterByType, filterByTestID, toJSON} = core;
   return function factory<Props, Methods>(component: React.ComponentType<Props>, methods?: Methods) {
-    return function driver(): TestDriveableComponent<Props> {
+    return function driver(): DriveableComponent<Props> {
       let isAttached = false;
       let _renderer: Renderer | null = null;
       let _component: Render | null = null;
