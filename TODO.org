@@ -1,7 +1,12 @@
 * Next
 ** General
-*** TODO Convert to TypeScript
+*** DONE Convert to TypeScript
+- State "DONE"       from "TODO"       [2019-05-23 Thu 12:58]
+*** TODO Documentation
+- [ ] Tutorial
+- [ ] API
 ** Driver
 *** DONE Drop containerDriver
 - State "DONE"       from "TODO"       [2018-11-08 Thu 10:32]
-*** TODO .getComponent() should always render to JSON
+*** DONE .getComponent() should always render to JSON
+- State "DONE"       from "TODO"       [2019-05-23 Thu 12:59]
