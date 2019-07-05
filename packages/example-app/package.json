@@ -11,7 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "react": "^16.3.2"
+    "react": "^16.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -24,6 +24,7 @@
     "dirty-chai": "^2.0.1",
     "mocha": "^5.2.0",
     "react-component-driver": "^0.8.0",
+    "react-test-renderer": "^16.8.6",
     "sinon": "^5.0.9",
     "sinon-chai": "^3.1.0"
   }

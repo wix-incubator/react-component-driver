@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {create, ReactTestRenderer as Renderer, TestRendererOptions as Options} from 'react-test-renderer';
+import {create, ReactTestRenderer as Renderer, TestRendererOptions as Options, act} from 'react-test-renderer';
 import {Render, Child, render_map} from './types';
 
 export function unmount(renderer: Renderer): void {
@@ -11,5 +11,17 @@ export function render<P = {}>(reactElement: React.ReactElement<P>, options?: Op
 }
 
 export function toJSON(component: Renderer): Render {
-  return render_map(component.toJSON() as Render, x => x);
+  return render_map(component.toJSON() as Render, wrapInAct);
+}
+
+function wrapInAct(node: Child) {
+  if (typeof node === 'object') {
+    for (const key in node.props) {
+      const prop = node.props[key];
+      if (typeof prop === 'function') {
+         node.props[key] = (...args: any[]) => act(() => prop(...args));
+      }
+    };
+  }
+  return node;
 }
