@@ -19,7 +19,11 @@ function wrapInAct(node: Child) {
     for (const key in node.props) {
       const prop = node.props[key];
       if (typeof prop === 'function') {
-         node.props[key] = (...args: any[]) => act(() => prop(...args));
+        node.props[key] = (...args: any[]) => {
+          let result;
+          act(() => void (result = prop(...args)));
+          return result;
+        }
       }
     };
   }
