@@ -1,6 +1,6 @@
 {
   "name": "redux-component-driver",
-  "version": "0.9.0-alpha.1",
+  "version": "0.9.0",
   "description": "React Component Driver adapted to work with Redux enhanced component.",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "react": "^16.8.0",
-    "react-component-driver": "^0.9.0-alpha.1",
+    "react-component-driver": "^0.9.0",
     "react-redux": "^5.0.7",
     "react-test-renderer": "^16.8.6",
     "redux": "^4.0.1",
