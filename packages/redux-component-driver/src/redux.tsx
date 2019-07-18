@@ -2,17 +2,23 @@ import * as React from 'react';
 import {Provider} from 'react-redux';
 import {componentDriver, ComponentDriver} from 'react-component-driver';
 import {Store, AnyAction, Action} from 'redux';
+import hoistStatics from 'hoist-non-react-statics';
 
-// TODO: do we need to hoist statics?
-export function withStore<P, S, A extends Action<any>>(WrappedComponent: React.ComponentClass<P>, store: Store<S, A>) {
-  return class WithStore extends React.PureComponent<P> {
+type InferProps<T> = T extends React.ComponentClass<infer Props> ? Props : never;
+type ReduxComponent<T> = React.ComponentClass<InferProps<T>>;
+
+export function withStore<C extends ReduxComponent<C>, S, A extends Action<any>>(WrappedComponent: C, store: Store<S, A>) {
+  const TypeAdjustedWrappedComponent = WrappedComponent as ReduxComponent<C>;
+
+  class WithStore extends React.PureComponent<InferProps<C>> {
     render() {
-      return <Provider store={store}><WrappedComponent {...this.props}/></Provider>;
+      return <Provider store={store}><TypeAdjustedWrappedComponent {...this.props}/></Provider>;
     }
   };
+  return hoistStatics(WithStore, WrappedComponent) as C;
 }
 
-export function reduxDriver<S, A extends Action<any>>(Component: React.ComponentClass, store: Store<S, A>, methods = {}) {
+export function reduxDriver<C extends ReduxComponent<C>, S, A extends Action<any>>(Component: C, store: Store<S, A>, methods = {}) {
   return componentDriver(withStore(Component, store), methods);
 }
 
