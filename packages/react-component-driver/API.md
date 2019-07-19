@@ -47,9 +47,10 @@ Returns elements with matching `testID` or `data-test-id` properties.
 
 Returns elements with component type equal to `type`.
 
-`getBy(predicate: (node: Child) => boolean): Child | undefined`
-`getByID(id: string | RegExp): RenderedNode | undefined`
-`getByType(type: string): RenderedNode | undefined`
+```getBy(predicate: (node: Child) => boolean): Child | undefined
+getByID(id: string | RegExp): RenderedNode | undefined
+getByType(type: string): RenderedNode | undefined
+```
 
 Same as `filterBy*` counterparts, but returns only first element if found.
 
