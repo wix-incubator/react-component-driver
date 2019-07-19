@@ -18,7 +18,7 @@ export default function queries<R, O>(backend: Backend<R, O>): Queries {
   }
 
   function getTextNodes(tree: Render) {
-    return filterBy(node => typeof node === 'string' || typeof node === 'number', tree);
+    return filterBy(node => typeof node === 'string' || typeof node === 'number', tree) as string[];
   }
 
   function filterByTestID(id: string | RegExp, tree: Render): RenderedNode[] {
