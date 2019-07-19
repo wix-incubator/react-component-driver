@@ -3,7 +3,7 @@ import {Backend, Render, Child, RenderedNode, render_map} from './backends/types
 import {flatten} from './utils/flatten';
 
 export interface Queries {
-  getTextNodes(tree: Render): Child[];
+  getTextNodes(tree: Render): string[];
   filterByTestID(id: string | RegExp, tree: Render): RenderedNode[];
   filterByType(type: string, tree: Render): RenderedNode[];
   filterBy(predicate: (node: Child) => boolean, tree: Render): Child[];
