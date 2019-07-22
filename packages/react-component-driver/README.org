@@ -99,13 +99,13 @@ const json = toJSON(renderComponent(Links, {hrefs: [
 
 const result = filterBy((node) => node.props && node.props.href === 'wix.com', json);
 
-assert.equal(true, !!result[0], 'Has wix.com link.');
+assert.ok(!!result[0], 'Has wix.com link.');
 #+END_SRC
 
 =ComponentDriver= can help make intention of above code clearer.
 
 #+BEGIN_SRC js
-const {ComponentDriver} from 'react-component-driver';
+const {ComponentDriver} = require('react-component-driver');
 
 class LinksDriver extends ComponentDriver {
   constructor() {
@@ -118,13 +118,13 @@ class LinksDriver extends ComponentDriver {
 
 const hrefs = [['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']];
 
-assert.equal(true, new LinksDriver().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
+assert.ok(new LinksDriver().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
 #+END_SRC
 
 There is also a function interface if you prefer.
 
 #+BEGIN_SRC js
-const {componentDriver} from 'react-component-driver';
+const {componentDriver} = require('react-component-driver');
 
 function links() {
   return componentDriver(Links, {
@@ -134,12 +134,10 @@ function links() {
   });
 }
 
-const hrefs = [['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']];
-
-assert.equal(true, links().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
+assert.ok(links().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
 #+END_SRC
 
-=ComponentDriver= exposes methods similar to then ones described in *Querying* section. These methods are =filterBy=, =filterByType=, =filterByID=. There are also corresponding methods that return first matched node -- =getBy=, =getByType=, =getByID=. In addition, there is =getComponent= to retrieve root node, =render= -- to invoke =getComponent=, i.e. start React life-cycle, but discard result. =unmount= to initiate unmounting. To set props for rendering, use =setProps=. It's possible to attach driver to pre-rendered tree or sub-tree by using =attachTo= method.
+=ComponentDriver= exposes methods similar to the ones described in *Querying* section. These methods are =filterBy=, =filterByType=, =filterByID=. There are also corresponding methods that return first matched node -- =getBy=, =getByType=, =getByID=. In addition, there is =getComponent= to retrieve root node, =render= -- to invoke =getComponent=, i.e. start React life-cycle, but discard result. =unmount= to initiate unmounting. To set props for rendering, use =setProps=. It's possible to attach driver to pre-rendered tree or sub-tree by using =attachTo= method.
 
 Let's study example below to see example usages of =ComponentDriver= API.
 
@@ -160,7 +158,7 @@ class Link extends React.PureComponent {
 }
 #+END_SRC
 
-List component depends on Linking and we make it clear by we declaring it as parameter. This will allow use to write tests and not depend on side effects.
+=List= component depends on React Native =Linking= service and we make it clear by we declaring it as parameter. This will allow use to write tests and not depend on side effects.
 
 #+BEGIN_SRC js
 const links = (Linking) => class Links extends React.PureComponent {
@@ -267,5 +265,5 @@ describe('Links', () => {
 
 ** API
 
-[[file:API.md][API]]
+Detailed [[file:API.md][API]].
 

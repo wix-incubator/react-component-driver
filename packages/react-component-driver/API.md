@@ -1,5 +1,7 @@
 # API of React Component Driver
 
+*Work in progress.*
+
 ## Class `ComponentDriver<Props>`
 
 ```javascript
@@ -33,7 +35,7 @@ Renders component and discards output. This starts component's life cycle. Query
 
 `getComponent(): Render`
 
-Renders and returns whole component and JSON.
+Renders and returns whole component as JSON.
 
 `filterBy(predicate: (node: Child) => boolean): Child[]`
 
