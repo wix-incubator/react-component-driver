@@ -14,6 +14,8 @@ This library is built on top of simple data structure derived from one produced 
 
 ## API
 
+For up to date, working examples see example projects in `packages` directory.
+
 ### react-component-driver
 
 - [Not so Quick Guide](packages/react-component-driver/README.org).
