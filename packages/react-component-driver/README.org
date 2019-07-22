@@ -1,0 +1,271 @@
+* React Component Driver
+
+** About
+
+Think about this package as friendly guide to help you black-box test React
+components. It evolved from real world experience writing applications in
+Angular, React, and React Native. It's a collection of best practices converted
+to a thin layer of utility functions.
+
+** Overview
+
+*** Rendering to JSON
+
+Main concept that all utilities are built on is simple JSON tree derived (rendered) from React elements. At the core we have functions =render= and =toJSON=.
+
+#+BEGIN_SRC js
+const assert = require('assert');
+const {render, toJSON} = require('react-component-driver');
+
+const json = toJSON(render(<a href="wix.com">Wix</a>));
+
+assert.deepEqual(json, { type: 'a', props: { href: 'wix.com' }, children: [ 'Wix' ] });
+#+END_SRC
+
+There is also a =renderComponent= helper which accepts component class or function and props.
+
+#+BEGIN_SRC js
+function Link({href, text}) {
+    return <a href={href}>{text}</a>;
+}
+
+const json = toJSON(renderComponent(Link, {href: 'wix.com', text: 'Wix'}));
+
+assert.deepEqual(json, { type: 'a', props: { href: 'wix.com' }, children: [ 'Wix' ] });
+#+END_SRC
+
+*** Querying
+
+To improve on snapshot testing we need to be able to assert on parts of component tree. There are multiple utilities that allow to filter JSON tree nodes.
+
+Most general is =filterBy=.
+
+#+BEGIN_SRC js
+function Links({hrefs}) {
+    return <ul>{hrefs.map(([href, text]) => <li><a href={href}>{text}</a></li>)}</ul>;
+}
+
+const json = toJSON(renderComponent(Links, {hrefs: [
+  ['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']
+]}));
+
+const result = filterBy((node) => node.props && node.props.href === 'wix.com', json);
+
+assert.deepEqual(result, [{ type: 'a', props: { href: 'wix.com' }, children: [ 'wix.com' ] }]);
+#+END_SRC
+
+Be aware that nodes that =filterBy= passes to filtering predicate can be =null= or of =string= type besides full nodes with type, props and children.
+
+Two more filtering functions are available out of the box. Both of them based on =filterBy= -- =filterByTestID= and =filterByType=.
+
+=filterByTestID= can find nodes that have prop =testID= (React Native) or =data-test-id= (React on Web) matching exact value or regular expression.
+
+#+BEGIN_SRC js
+filterByTestID('exact-test-id', tree);
+filterByTestID(/^list-item-[0-9]+$/, tree);
+#+END_SRC
+
+=filterByType= does exactly what you think -- filters by =type= field.
+
+#+BEGIN_SRC js
+filterByType('a', tree);
+#+END_SRC
+
+There is also another predefined helper =getTextNodes=. It allows to extract all text leaves.
+
+#+BEGIN_SRC js
+
+const json = toJSON(renderComponent(Links, {hrefs: [
+  ['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']
+]}));
+
+const strings = getTextNodes(json);
+
+assert.deepEqual(strings, [ 'Wix', 'DeviantArt', 'Flok' ]);
+#+END_SRC
+
+*** Abstraction using Component Driver
+
+It is beneficial to abstract queries as functions with descriptive names. Let's revisit example from before:
+
+#+BEGIN_SRC js
+function Links({hrefs}) {
+    return <ul>{hrefs.map(([href, text]) => <li><a href={href}>{text}</a></li>)}</ul>;
+}
+
+const json = toJSON(renderComponent(Links, {hrefs: [
+  ['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']
+]}));
+
+const result = filterBy((node) => node.props && node.props.href === 'wix.com', json);
+
+assert.equal(true, !!result[0], 'Has wix.com link.');
+#+END_SRC
+
+=ComponentDriver= can help make intention of above code clearer.
+
+#+BEGIN_SRC js
+const {ComponentDriver} from 'react-component-driver';
+
+class LinksDriver extends ComponentDriver {
+  constructor() {
+    super(Links);
+  }
+  hasWixLink() {
+    return !!this.getBy((node) => node.props && node.props.href === 'wix.com');
+  }
+}
+
+const hrefs = [['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']];
+
+assert.equal(true, new LinksDriver().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
+#+END_SRC
+
+There is also a function interface if you prefer.
+
+#+BEGIN_SRC js
+const {componentDriver} from 'react-component-driver';
+
+function links() {
+  return componentDriver(Links, {
+    hasWixLink() {
+      return !!this.getBy((node) => node.props && node.props.href === 'wix.com');
+    }
+  });
+}
+
+const hrefs = [['wix.com', 'Wix'], ['deviantart.com', 'DeviantArt'], ['flok.com', 'Flok']];
+
+assert.equal(true, links().setProps({hrefs}).hasWixLink(), 'Has wix.com link.');
+#+END_SRC
+
+=ComponentDriver= exposes methods similar to then ones described in *Querying* section. These methods are =filterBy=, =filterByType=, =filterByID=. There are also corresponding methods that return first matched node -- =getBy=, =getByType=, =getByID=. In addition, there is =getComponent= to retrieve root node, =render= -- to invoke =getComponent=, i.e. start React life-cycle, but discard result. =unmount= to initiate unmounting. To set props for rendering, use =setProps=. It's possible to attach driver to pre-rendered tree or sub-tree by using =attachTo= method.
+
+Let's study example below to see example usages of =ComponentDriver= API.
+
+**** Example Component: List of Links
+
+We are going to define to components -- a link and a list of links.
+
+#+BEGIN_SRC js
+class Link extends React.PureComponent {
+  onPress = () => this.props.onPress(this.props.url);
+  render() {
+    return (
+      <TouchableOpacity testID={this.props.testID} onPress={this.onPress}>
+        <Text>{this.props.title}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
+#+END_SRC
+
+List component depends on Linking and we make it clear by we declaring it as parameter. This will allow use to write tests and not depend on side effects.
+
+#+BEGIN_SRC js
+const links = (Linking) => class Links extends React.PureComponent {
+  keyExtractor = (link) => link.url;
+  renderLink = (data) => <Link testID={'link-' + data.item.index} onPress={this.onLinkPress} url={data.item.url} text={data.item.title}/>;
+  onLinkPress = (url) => Linking.openURL(url);
+  render() {
+    return (
+      <FlatList
+        extractKey={this.keyExtractor}
+        data={this.props.links}
+        renderItem={this.renderLink}
+      />
+    );
+  }
+};
+#+END_SRC
+
+**** Link Test Driver
+
+#+BEGIN_SRC js
+class LinkDriver extends ComponentDriver {
+  constructor() {
+    super(Link);
+  }
+  getTitle() {
+    return getTextNodes(this.getComponent()).join('');
+  }
+  tap() {
+    this.getComponent().props.onPress();
+  }
+}
+#+END_SRC
+
+**** Links Test Driver
+
+Here you can find example of =attachTo=. Reusing =LinkDriver= removes dependency on concrete =Link= implementation.
+
+#+BEGIN_SRC js
+class LinksDriver extends ComponentDriver {
+  constructor(Linking) {
+    super(links(Linking));
+  }
+  getLinks() {
+    return this.filterByID(/^link-[0-9]+$/)
+      .map(link => new LinkDriver().attachTo(link));
+  }
+  getLinkTitles() {
+    return this.getLinks().map(link => link.getTitle());
+  }
+  tapLink(title) {
+    for (const link of this.getLinks()) {
+      if (link.getTitle() === title) {
+        link.tap();
+        break;
+      }
+    }
+    return this;
+  }
+}
+#+END_SRC
+
+**** Integration Tests
+
+=Link= tests are relatively simple as it's pure component and behaviour depends completely on what is passed via props.
+
+#+BEGIN_SRC js
+describe('Link', () => {
+  it('should render title', () => {
+    const drv = new LinkDriver().setProps({title: 'A Link'});
+    expect(drv.getTitle()).to.equal('A Link');
+  });
+
+  it('should open URL on press', () => {
+    const onPress = sinon.spy();
+    new LinkDriver()
+      .setProps({url: 'wix://contacts/contact/123', onPress})
+      .tap();
+    expect(onPress).to.be.calledWith('wix://contacts/contact/123');
+  });
+});
+#+END_SRC
+
+=Links= is a lot more interesting. It depends on a =Linking= service which has side-effects. Moreover, =LinksDriver= uses =LinkDriver= to query and control embedded =Link= components.
+
+#+BEGIN_SRC js
+describe('Links', () => {
+  const links = [{url: 'wix://a', title: 'A'}, {url: 'wix://b', title: 'B'}];
+  let Linking;
+
+  beforeEach(() => Linking = sinon.stub(require('react-native').Linking));
+
+  it('should render links', () => {
+    const drv = new LinksDriver().setProps({links});
+    expect(drv.getLinkTitles()).to.deep.equal(['A', 'B']);
+  });
+
+  it('should open URL on press', () => {
+    new LinksDriver(Linking).setProps({links}).tapLink('A');
+    expect(Linking.openURL).to.be.calledWith('wix://a')
+  });
+});
+#+END_SRC
+
+** API
+
+[[file:API.md][API]]
+

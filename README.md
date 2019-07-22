@@ -14,8 +14,14 @@ This library is built on top of simple data structure derived from one produced 
 
 ## API
 
-- [react-component-driver](packages/react-component-driver/API.md).
-- [redux-component-driver](packages/redux-component-driver/API.md).
+### react-component-driver
+
+- [Not so Quick Guide](packages/react-component-driver/README.org).
+- [API](packages/react-component-driver/API.md).
+
+### redux-component-driver
+
+- [API](packages/redux-component-driver/API.md).
 
 ## Related
 
