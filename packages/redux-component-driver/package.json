@@ -10,7 +10,7 @@
     "build": " tsc -d"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
-  "repository": "github:donataswix/react-component-driver",
+  "repository": "github:wix-incubator/react-component-driver",
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",
