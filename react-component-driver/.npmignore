@@ -1,0 +1,6 @@
+.nvmrc
+.babelrc
+tests/
+tsconfig.json
+Makefile
+*.tgz

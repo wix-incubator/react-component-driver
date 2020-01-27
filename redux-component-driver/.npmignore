@@ -1,0 +1,6 @@
+.nvmrc
+tests/
+tsconfig.json
+*.spec.*
+Makefile
+*.tgz

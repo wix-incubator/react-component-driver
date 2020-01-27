@@ -1,14 +1,11 @@
 {
-  "name": "react-component-driver",
   "private": true,
   "scripts": {
-    "test": "lerna run test",
-    "postinstall": "lerna bootstrap"
+    "test": "make test"
   },
   "author": "Donatas Petrauskas <donatas.petr@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^3.0.0"
-  },
-  "dependencies": {}
+    "npm-packlist": "^2.0.2"
+  }
 }

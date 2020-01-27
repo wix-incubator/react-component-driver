@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "name": "example-redux-app",
+  "version": "0.10.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "pretest": "tsc",
+    "test": "mocha -r source-map-support/register -r ./mocha-setup.js 'dist/**/*.{spec,it}.js'"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.6",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.17.8",
+    "@types/react": "^16.9.16",
+    "@types/react-test-renderer": "^16.9.1",
+    "@types/react-redux": "^7.1.5",
+    "@types/sinon": "^7.5.1",
+    "@types/sinon-chai": "^3.2.3",
+    "chai": "^4.2.0",
+    "chai-truthy": "^1.0.0",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^6.2.2",
+    "react-test-renderer": "16.9.0",
+    "redux-component-driver": "file:../redux-component-driver/redux-component-driver.tgz",
+    "sinon": "^5.1.1",
+    "sinon-chai": "^3.3.0",
+    "source-map-support": "^0.5.16",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.7.3"
+  }
+}

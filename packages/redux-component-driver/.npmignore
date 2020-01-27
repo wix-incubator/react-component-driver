@@ -1,4 +1,0 @@
-.nvmrc
-tests/
-tsconfig.json
-*.spec.*
