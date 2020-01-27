@@ -16,6 +16,7 @@ async function inAct<T>(callback: () => T): Promise<T> {
   let result: T;
   await act(async () => {
     result = callback();
+    // Two cycles should hopefully help with most of the async rendering cases.
     // @ts-ignore
     await new Promise((resolve) => setTimeout(resolve));
     // @ts-ignore
