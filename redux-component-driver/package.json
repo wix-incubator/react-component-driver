@@ -1,6 +1,6 @@
 {
   "name": "redux-component-driver",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "description": "React Component Driver adapted to work with Redux enhanced component.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^3.3.1",
-    "react-component-driver": "file:../react-component-driver.tgz"
+    "react-component-driver": "0.10.0"
   },
   "peerDependencies": {
     "react-redux": "*",

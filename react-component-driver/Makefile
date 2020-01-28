@@ -11,8 +11,12 @@ $(target): $(sources)
 	npm pack .
 	mv $(package_name)-`jq -r .version package.json`.tgz $(package_name).tgz
 
-.PHONEY: clean
+.PHONEY: clean publish
 
 clean:
 	rm -rf node_modules
 	rm *.tgz
+
+publish: $(target)
+	$(MAKE) clean
+	npm publish
