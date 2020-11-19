@@ -18,12 +18,12 @@ For up to date, working examples see example projects in `packages` directory.
 
 ### react-component-driver
 
-- [Not so Quick Guide](packages/react-component-driver/README.org).
-- [API](packages/react-component-driver/API.md).
+- [Not so Quick Guide](react-component-driver/README.org).
+- [API](react-component-driver/API.md).
 
 ### redux-component-driver
 
-- [API](packages/redux-component-driver/API.md).
+- [API](redux-component-driver/API.md).
 
 ## Related
 
