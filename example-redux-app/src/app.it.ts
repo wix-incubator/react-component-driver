@@ -1,21 +1,16 @@
-import {AnyAction} from 'redux';
 import {ChangeEvent} from 'react';
-import {reduxDriver, ReduxComponentDriver} from 'redux-component-driver';
+import {ReduxComponentDriver} from 'redux-component-driver';
 
 import {formDriver} from './components/form.driver';
 import {listDriver} from './components/list.driver';
 import {createAppStore, State} from './store';
-import {App, Props, TEST_ID} from './app';
+import {App, TEST_ID} from './app';
 import {FormAction} from './store/form';
 import {ListAction} from './store/list';
 import {Repository} from './repository';
 
 
-function getTestID(prefix: string, suffix: string) {
-  return prefix + '.' + suffix;
-}
-
-class AppDriver extends ReduxComponentDriver<ReturnType<typeof App>, State, AnyAction> {
+class AppDriver extends ReduxComponentDriver<ReturnType<typeof App>, State, FormAction | ListAction> {
   constructor(private repository: Repository) {
     super(App(repository), createAppStore());
   }
