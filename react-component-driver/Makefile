@@ -15,8 +15,8 @@ $(target): $(sources)
 
 clean:
 	rm -rf node_modules
+	rm -f package-lock.json
 	rm -f *.tgz
 
 publish: $(target)
-	$(MAKE) clean
 	npm publish
