@@ -4,3 +4,4 @@ tests/
 tsconfig.json
 Makefile
 *.tgz
+jest.*
