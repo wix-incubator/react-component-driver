@@ -1,8 +1,13 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
 import {Item} from './item';
 
-export class List extends PureComponent {
+export interface ListProps {
+  testID: string;
+  items: string[];
+}
+
+export class List extends React.PureComponent<ListProps> {
   static defaultProps = {
     items: []
   };
@@ -10,19 +15,19 @@ export class List extends PureComponent {
   static TEST_ID = {
     EMPTY: 'empty',
     ITEMS: 'items',
-    ITEM: (i) => 'item-' + i
+    ITEM: (i: number) => 'item-' + i
   };
 
-  getTestID = (suffix) =>
+  getTestID = (suffix: string) =>
     this.props.testID + '.' + suffix;
 
-  renderItem = (item, i) => (
+  renderItem = (item: string, i: number) => (
     <li key={i}>
       <Item testID={this.getTestID('item-' + i)} index={i + 1} text={item}/>
     </li>
   );
 
-  renderContent = (items) => {
+  renderContent = (items: string[]) => {
     if (items.length > 0) {
       return (
         <ul data-test-id={this.getTestID(List.TEST_ID.ITEMS)}>

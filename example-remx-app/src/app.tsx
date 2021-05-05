@@ -1,11 +1,17 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 import * as remx from 'remx';
 
 import {Form} from './components/form';
 import {List} from './components/list';
+import {createAppState} from './store';
 
-export default ({getters, setters}) => {
-  class App extends Component {
+interface AppProps {
+  listItems: string[];
+  formInput: string;
+}
+
+export default ({getters, setters}: ReturnType<typeof createAppState>) => {
+  class App extends React.Component<AppProps> {
     static TEST_ID = {
       APP: 'app',
       FORM: 'app.form',

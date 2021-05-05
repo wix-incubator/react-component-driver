@@ -1,6 +1,13 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
-export class Form extends PureComponent {
+interface FormProps {
+  testID: string;
+  input: string;
+  onInputChange(input: string): void;
+  onAdd(input: string): void;
+}
+
+export class Form extends React.PureComponent<FormProps> {
   static TEST_ID = {
     INPUT: 'input',
     BUTTON: 'button',
@@ -10,11 +17,11 @@ export class Form extends PureComponent {
     onInputChange: () => {},
   };
 
-  getTestID = (suffix) =>
+  getTestID = (suffix: string) =>
     this.props.testID + '.' + suffix;
 
-  onChangeText = (value) =>
-    this.props.onInputChange(value);
+  onChangeText = (event: React.ChangeEvent<HTMLInputElement>) =>
+    this.props.onInputChange(event.target.value);
 
   onAdd = () => {
     this.props.onAdd(this.props.input);

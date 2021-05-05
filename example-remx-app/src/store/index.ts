@@ -3,7 +3,7 @@ import * as remx from 'remx';
 export function createAppState() {
   const state = remx.state({
     input: '',
-    items: []
+    items: [] as string[]
   });
 
   const getters = remx.getters({
@@ -16,10 +16,10 @@ export function createAppState() {
   });
 
   const setters = remx.setters({
-    setInput(value) {
+    setInput(value: string) {
       state.input = value;
     },
-    addItem(value) {
+    addItem(value: string) {
       state.items = state.items.concat(value);
     }
   });

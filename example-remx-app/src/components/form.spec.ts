@@ -4,7 +4,7 @@ describe('Form', () => {
   it('uses `testID` for container element', () => {
     const testID = Math.random().toString();
     const form = formDriver().setProps({testID});
-    expect(form.getByID(testID)).to.be.truthy();
+    expect(!!form.getByID(testID)).to.equal(true);
   });
 
   it('should initialize input value with `input` prop', () => {
@@ -23,7 +23,7 @@ describe('Form', () => {
   it('should invoke `onAdd` with input value when button is clicked', () => {
     const onAdd = sinon.stub();
     const input = Math.random().toString();
-    const form = formDriver().setProps({onAdd, input}).clickAdd();
+    formDriver().setProps({onAdd, input}).clickAdd();
     expect(onAdd).to.be.calledWith(input);
   });
 });

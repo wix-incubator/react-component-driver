@@ -1,15 +1,16 @@
-import {componentDriver, getTextNodes, filterBy} from 'react-component-driver';
+import {componentDriver, getTextNodes, filterBy, Child} from 'react-component-driver';
 
 import {List} from './list';
 import {itemDriver} from './item.driver';
 
-const itemTestID = (node) => {
-  const testID = node && node.props && node.props['data-test-id'];
+const itemTestID = (node: Child) => {
+  const testID = typeof node === 'object' && node.props['data-test-id'];
   return /\.item-\d+$/.test(testID);
 };
 
 export const listDriver = () => componentDriver(List, {
-  getNestedID(id) {
+  getNestedID(id: string): string {
+    // @ts-ignore
     return this.props['data-test-id'] + '.' + id;
   },
   getItemsContainer() {
@@ -24,11 +25,11 @@ export const listDriver = () => componentDriver(List, {
       return [];
     }
   },
-  getItem(n) {
+  getItem(n: number) {
     const node = this.getByID(this.getNestedID(List.TEST_ID.ITEM(n)));
-    return itemDriver().attachTo(node).getTexts();
+    return itemDriver().attachTo(node!).getTexts();
   },
   getEmptyStateText() {
-    return getTextNodes(this.getByID(this.getNestedID(List.TEST_ID.EMPTY))).join('');
+    return getTextNodes(this.getByID(this.getNestedID(List.TEST_ID.EMPTY))!).join('');
   }
 });

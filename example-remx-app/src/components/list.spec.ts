@@ -3,7 +3,7 @@ import {listDriver} from './list.driver';
 describe('List', () => {
   it('uses `testID` for container', () => {
     const testID = Math.random().toString();
-    expect(listDriver().setProps({testID}).getByID(testID)).to.be.truthy();
+    expect(!!listDriver().setProps({testID}).getByID(testID)).to.equal(true);
   });
 
   describe('when empty', () => {

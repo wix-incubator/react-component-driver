@@ -1,4 +1,3 @@
-import React, {PureComponent} from 'react';
 import {componentDriver} from 'react-component-driver';
 
 import createApp from './app';
@@ -6,23 +5,19 @@ import {createAppState} from './store';
 import {formDriver} from './components/form.driver';
 import {listDriver} from './components/list.driver';
 
-function getTestID(prefix, suffix) {
-  return prefix + '.' + suffix;
-}
-
 const App = createApp(createAppState());
 
 const appDriver = () => componentDriver(App, {
   getList() {
     return listDriver()
-      .attachTo(this.getByID(App.TEST_ID.LIST))
+      .attachTo(this.getByID(App.TEST_ID.LIST)!)
       .getItems();
   },
   getForm() {
     return formDriver()
-      .attachTo(this.getByID(App.TEST_ID.FORM));
+      .attachTo(this.getByID(App.TEST_ID.FORM)!);
   },
-  inputText(value) {
+  inputText(value: string) {
     this.getForm().invokeOnInputChange(value);
     return this;
   },

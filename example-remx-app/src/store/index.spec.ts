@@ -1,7 +1,10 @@
 import {createAppState} from './index';
 
+type State = ReturnType<typeof createAppState>;
+
 describe('State', () => {
-  let getters, setters;
+  let getters: State['getters'];
+  let setters: State['setters'];
 
   beforeEach(() => {
     const state = createAppState();

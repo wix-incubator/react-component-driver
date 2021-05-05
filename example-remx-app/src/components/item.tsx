@@ -1,6 +1,12 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
-export class Item extends PureComponent {
+interface ItemProps {
+  index: number;
+  text: string;
+  testID: string;
+}
+
+export class Item extends React.PureComponent<ItemProps> {
   static TEST_ID = {
     TEXT: 'text',
     INDEX: 'index',
