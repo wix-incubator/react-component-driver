@@ -1,12 +1,14 @@
-* Next
-** General
-*** DONE Convert to TypeScript
+* General
+** DONE Convert to TypeScript
 - State "DONE"       from "TODO"       [2019-05-23 Thu 12:58]
-*** TODO Documentation
+** TODO Documentation
 - [ ] Tutorial
 - [ ] API
-** Driver
-*** DONE Drop containerDriver
+- [ ] Collection of best practices
+* Driver
+** DONE Drop containerDriver
 - State "DONE"       from "TODO"       [2018-11-08 Thu 10:32]
-*** DONE .getComponent() should always render to JSON
+** DONE .getComponent() should always render to JSON
 - State "DONE"       from "TODO"       [2019-05-23 Thu 12:59]
+** TODO Improve attachTo()
+Need to rethink types here. Props of already rendered component is not available, so =this.props= should be removed?
