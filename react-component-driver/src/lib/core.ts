@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {act} from 'react-test-renderer';
 import queryFactory, {Queries} from './query';
-import {Backend, Render, Child} from './backends/types';
+import {Backend, Render} from './backends/types';
 
 export interface Core<Renderer, Options> extends Queries {
   toJSON(renderer: Renderer): Render;

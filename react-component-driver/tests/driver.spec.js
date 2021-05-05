@@ -11,6 +11,9 @@ describe('Driver', function () {
   ].forEach(([{componentDriver}, name]) => {
     describe('For Component From ' + name, function () {
       const example = () => componentDriver(Example, {
+        getButton() {
+          return this.getByID('button');
+        },
         getText() {
           return this.getByType('Text').children;
         },
@@ -74,6 +77,13 @@ describe('Driver', function () {
         const onUnmount = jest.fn();
         example().setProps({onUnmount}).unmount();
         expect(onUnmount).toBeCalled();
+      });
+
+      it('should allow to attach to undefined and null', async () => {
+        expect(example().attachTo(undefined).getButton()).toBeUndefined();
+        expect(example().attachTo(null).getButton()).toBeUndefined();
+        expect(example().attachTo(undefined).getComponent()).toBeNull();
+        expect(await example().attachTo(null).getComponentAsync()).toBeNull();
       });
     });
   });

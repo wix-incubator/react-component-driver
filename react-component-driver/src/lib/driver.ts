@@ -1,11 +1,10 @@
 import * as React from 'react';
-import {Backend, Child, RenderedNode, Render} from './backends/types';
+import {Child, RenderedNode, Render} from './backends/types';
 import {Core} from './core';
-import {Component} from '../shallow';
 
-export interface Drivers<Props> {
+export interface Drivers {
   ComponentDriver: new <Props>(component: React.ComponentType<Props>) => DriveableComponent<Props>;
-  componentDriver<Props>(component: React.ComponentType<Props>, methods?: any): any;
+  componentDriver<Props, Methods>(component: React.ComponentType<Props>, methods?: ThisType<DriveableComponent<Props> & Methods> & Methods): DriveableComponent<Props> & Methods;
 }
 
 export interface DriveableComponent<Props> {
@@ -21,12 +20,13 @@ export interface DriveableComponent<Props> {
   getByID(id: string | RegExp): RenderedNode | undefined;
   filterByType(type: string): RenderedNode[];
   getByType(type: string): RenderedNode | undefined;
-  attachTo(node: Render): this;
+  attachTo(node?: Render): this;
   unmount(): void;
 }
 
 export class BaseComponentDriver<Props, Renderer, Options> implements DriveableComponent<Props> {
   private renderer: Renderer | null = null;
+  private isAttached = false;
   private attached: Render | null = null;
   props: Partial<Props> = {};
 
@@ -47,8 +47,9 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
     return this.renderer;
   }
 
-  attachTo(component: Render) {
-    this.attached = component;
+  attachTo(component?: Render) {
+    this.isAttached = true;
+    this.attached = component ?? null;
     this.props = component && typeof component !== 'string' && 'props' in component ? component.props as Partial<Props> : {};
     return this;
   }
@@ -59,7 +60,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
   }
 
   getComponent() {
-    if (this.attached) {
+    if (this.isAttached) {
       return this.attached;
     } else {
       return this.core.toJSON(this.getRenderer());
@@ -67,7 +68,7 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
   }
 
   async getComponentAsync() {
-    if (this.attached) {
+    if (this.isAttached) {
       return this.attached;
     } else {
       return this.core.toJSON(await this.getRendererAsync());
@@ -115,7 +116,8 @@ export class BaseComponentDriver<Props, Renderer, Options> implements DriveableC
 
 export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>) {
   const {renderComponent, renderComponentAsync, filterBy, filterByType, filterByTestID, toJSON} = core;
-  return function factory<Props, Methods>(component: React.ComponentType<Props>, methods?: Methods): DriveableComponent<Props> {
+
+  return function factory<Props, Methods extends Object>(component: React.ComponentType<Props>, methods?: Methods & ThisType<Methods & DriveableComponent<Props>>): DriveableComponent<Props> & Methods {
     let isAttached = false;
     let _renderer: Renderer | null = null;
     let _component: Render | null = null;
@@ -136,11 +138,11 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
       return _renderer;
     }
 
-    return {
+    const base = {
       props: {},
-      attachTo(component: RenderedNode | null) {
+      attachTo(component?: RenderedNode) {
         isAttached = true;
-        _component = component;
+        _component = component ?? null;
         this.props = component ? (component.props as Partial<Props>) : {};
         return this;
       },
@@ -195,7 +197,8 @@ export function componentDriver<Renderer, Options>(core: Core<Renderer, Options>
       getByType(type: string) {
         return this.filterByType(type)[0];
       },
-      ...methods
     };
+
+    return Object.assign(base, methods);
   };
 }

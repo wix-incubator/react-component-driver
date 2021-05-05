@@ -2,7 +2,7 @@ import core, {Core} from './core';
 import {Drivers, DriveableComponent, BaseComponentDriver, componentDriver} from './driver';
 import {Backend} from './backends/types';
 
-export default function recodr<Props, Renderer, Options>(backend: Backend<Renderer, Options>): Core<Renderer, Options> & Drivers<Props> {
+export default function recodr<Renderer, Options>(backend: Backend<Renderer, Options>): Core<Renderer, Options> & Drivers {
   const utils = core(backend);
 
   class ComponentDriver<Props> extends BaseComponentDriver<Props, Renderer, Options> implements DriveableComponent<Props> {

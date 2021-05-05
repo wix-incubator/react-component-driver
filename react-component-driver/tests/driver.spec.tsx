@@ -32,10 +32,14 @@ export default class Example extends React.Component<ExampleProps, ExampleState>
 }
 
 describe('Driver', function () {
-  function driverTests<Props>(name: string, ComponentDriver: typeof full.ComponentDriver) {
+  function driverTests(name: string, ComponentDriver: typeof full.ComponentDriver) {
     class ExampleDriver extends ComponentDriver<ExampleProps> {
       constructor() {
         super(Example);
+      }
+
+      getButton() {
+        return this.getByID('button');
       }
 
       getText() {
@@ -105,6 +109,13 @@ describe('Driver', function () {
         const onUnmount = jest.fn();
         example().setProps({onUnmount}).unmount();
         expect(onUnmount).toBeCalled();
+      });
+
+      it('should allow to attach to undefined and null', async () => {
+        expect(example().attachTo(undefined).getButton()).toBeUndefined();
+        expect(example().attachTo(null).getButton()).toBeUndefined();
+        expect(example().attachTo(undefined).getComponent()).toBeNull();
+        expect(await example().attachTo(null).getComponentAsync()).toBeNull();
       });
     });
   }
