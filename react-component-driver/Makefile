@@ -15,7 +15,7 @@ $(target): $(sources)
 
 clean:
 	rm -rf node_modules
-	rm *.tgz
+	rm -f *.tgz
 
 publish: $(target)
 	$(MAKE) clean

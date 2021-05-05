@@ -15,8 +15,8 @@ $(target): $(sources)
 .PHONEY: clean publish
 
 clean:
-	rm -r node_modules
-	rm *.tgz
+	rm -rf node_modules
+	rm -f *.tgz
 
 publish: $(target)
 	$(call set_production_version)

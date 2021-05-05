@@ -17,8 +17,8 @@ clean:
 	$(MAKE) -C react-component-driver clean
 	$(MAKE) -C redux-component-driver clean
 	rm -rf node_modules
-	rm package-lock.json
-	rm *.tgz
+	rm -f package-lock.json
+	rm -f *.tgz
 
 test: ./node_modules/.bin/npm-packlist react-component-driver.tgz redux-component-driver.tgz
 	$(MAKE) -C example-app clean test
