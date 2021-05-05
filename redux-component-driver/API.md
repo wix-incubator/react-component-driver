@@ -14,6 +14,10 @@ class App extends ReduxComponentDriver {
 }
 ```
 
+## `reduxDriver(Component, store, methods)`
+
+Same as `componentDriver` from `react-component-driver`, but wraps `Component` in `<Provider store={store}>`.
+
 ## `withStore(WrappedComponent, store)`
 
-Wraps `WrappedComponent` in Redux Provider and passes `store`.
+Wraps `WrappedComponent` with `<Provider store={store}>`.
